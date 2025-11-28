@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, secretCode } = req.body;
 
     if (!name || !email || !password || !role) {
       return res.status(400).json({ error: 'All fields are required' });
@@ -16,6 +16,17 @@ router.post('/register', async (req, res) => {
 
     if (!['student', 'mentor'].includes(role)) {
       return res.status(400).json({ error: 'Invalid role' });
+    }
+
+    // Validate secret code for mentor registration
+    if (role === 'mentor') {
+      if (!secretCode) {
+        return res.status(400).json({ error: 'Secret code is required for mentor registration' });
+      }
+      
+      if (secretCode !== process.env.MENTOR_SECRET_CODE) {
+        return res.status(400).json({ error: 'Invalid secret code' });
+      }
     }
 
     const existingUser = await getAsync('SELECT id FROM users WHERE email = ?', [email]);

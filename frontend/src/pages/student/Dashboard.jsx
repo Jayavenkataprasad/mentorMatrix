@@ -21,14 +21,16 @@ export default function StudentDashboard() {
     const doubtEvents = notifications.filter(n => 
       n.type === 'doubt:created' || n.type === 'doubt:resolved'
     );
+    console.log('Dashboard doubt events:', doubtEvents);
     if (doubtEvents.length > 0) {
       fetchDashboard();
     }
-  }, [notifications]);
+  }, [notifications.length]); // Use length instead of full notifications array
 
   const fetchDashboard = async () => {
     try {
       const response = await studentAPI.getDashboard();
+      console.log('Dashboard data:', response.data);
       setDashboard(response.data);
     } catch (error) {
       console.error('Failed to fetch dashboard:', error);
@@ -101,7 +103,7 @@ export default function StudentDashboard() {
               <MessageCircle className="text-purple-400" size={24} />
               <span className="text-xs text-purple-300 font-medium">Active</span>
             </div>
-            <p className="text-3xl font-bold text-white">{dashboard?.activeDoubts || 0}</p>
+            <p className="text-3xl font-bold text-white">{dashboard?.totalDoubts - dashboard?.resolvedDoubts || 0}</p>
             <p className="text-sm text-gray-400 mt-1">Doubts</p>
           </div>
         </div>
@@ -157,7 +159,7 @@ export default function StudentDashboard() {
           >
             <CheckCircle className="mb-3 group-hover:scale-110 transition-transform" size={24} />
             <p className="font-semibold">My Tasks</p>
-            <p className="text-sm opacity-80">{dashboard?.pendingTasks || 0} pending</p>
+            <p className="text-sm opacity-80">{dashboard?.pendingTasks?.length || 0} pending</p>
           </button>
 
           <button

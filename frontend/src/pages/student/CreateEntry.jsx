@@ -53,44 +53,48 @@ export default function CreateEntry() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <Navbar />
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-8">Create Learning Entry</h2>
+      <div className="max-w-4xl mx-auto p-6">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-white mb-2">Create Learning Entry</h1>
+          <p className="text-purple-200">Document your learning progress and insights</p>
+        </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-            {error}
+          <div className="mb-6 p-4 bg-red-600/20 border border-red-500 rounded-lg flex items-start gap-3">
+            <AlertCircle className="text-red-400 flex-shrink-0 mt-0.5" size={20} />
+            <p className="text-red-300 text-sm">{error}</p>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="bg-slate-800/50 border border-slate-700 rounded-xl shadow-2xl p-8 space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Title *</label>
+            <label className="block text-sm font-medium text-purple-200 mb-2">Title *</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="What did you learn today?"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+              className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Description *</label>
+            <label className="block text-sm font-medium text-purple-200 mb-2">Description *</label>
             <textarea
               value={body}
               onChange={(e) => setBody(e.target.value)}
               placeholder="Write your learning notes, doubts, or questions here..."
               rows="8"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+              className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors resize-none"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+            <label className="block text-sm font-medium text-purple-200 mb-2">Tags</label>
             <div className="flex gap-2 mb-2">
               <input
                 type="text"
@@ -98,24 +102,24 @@ export default function CreateEntry() {
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                 placeholder="e.g., React, DSA, HTML"
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="flex-1 px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
               />
               <button
                 type="button"
                 onClick={addTag}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                className="px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl transition-colors"
               >
                 Add
               </button>
             </div>
             <div className="flex flex-wrap gap-2">
               {tags.map(tag => (
-                <span key={tag} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                <span key={tag} className="bg-purple-600/20 text-purple-300 border border-purple-500 px-3 py-1 rounded-full text-sm flex items-center gap-2">
                   {tag}
                   <button
                     type="button"
                     onClick={() => removeTag(tag)}
-                    className="hover:text-blue-600"
+                    className="hover:text-purple-400 transition-colors"
                   >
                     <X size={16} />
                   </button>
@@ -125,7 +129,7 @@ export default function CreateEntry() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Resources (URLs)</label>
+            <label className="block text-sm font-medium text-purple-200 mb-2">Resources (URLs)</label>
             <div className="flex gap-2 mb-2">
               <input
                 type="url"
@@ -133,26 +137,26 @@ export default function CreateEntry() {
                 onChange={(e) => setResourceInput(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addResource())}
                 placeholder="https://example.com"
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="flex-1 px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
               />
               <button
                 type="button"
                 onClick={addResource}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                className="px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl transition-colors"
               >
                 Add
               </button>
             </div>
             <div className="space-y-2">
               {resources.map(resource => (
-                <div key={resource} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
-                  <a href={resource} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm truncate">
+                <div key={resource} className="flex items-center justify-between bg-slate-700/30 p-3 rounded-lg border border-slate-600">
+                  <a href={resource} target="_blank" rel="noopener noreferrer" className="text-purple-300 hover:text-purple-200 text-sm truncate transition-colors">
                     {resource}
                   </a>
                   <button
                     type="button"
                     onClick={() => removeResource(resource)}
-                    className="text-red-500 hover:text-red-700"
+                    className="text-red-400 hover:text-red-300 transition-colors"
                   >
                     <X size={18} />
                   </button>
@@ -165,7 +169,7 @@ export default function CreateEntry() {
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all disabled:opacity-50"
+              className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-xl hover:shadow-lg transition-all disabled:opacity-50"
             >
               <Save size={20} />
               {loading ? 'Creating...' : 'Create Entry'}
@@ -173,7 +177,7 @@ export default function CreateEntry() {
             <button
               type="button"
               onClick={() => navigate('/student/entries')}
-              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl border border-slate-600 transition-colors"
             >
               Cancel
             </button>

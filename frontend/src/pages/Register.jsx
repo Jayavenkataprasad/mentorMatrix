@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../api/client';
-import { User, Mail, Lock, AlertCircle, Eye, EyeOff, BookOpen, Users } from 'lucide-react';
+import { User, Mail, Lock, AlertCircle, Eye, EyeOff, BookOpen, Users, Key } from 'lucide-react';
 
 export default function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('student');
+  const [secretCode, setSecretCode] = useState('');
+  const [showSecretCode, setShowSecretCode] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +23,12 @@ export default function Register() {
     setLoading(true);
 
     try {
-      const response = await authAPI.register({ name, email, password, role });
+      const registrationData = { name, email, password, role };
+      if (role === 'mentor') {
+        registrationData.secretCode = secretCode;
+      }
+      
+      const response = await authAPI.register(registrationData);
       // Don't auto-login after registration, redirect to login instead
       navigate('/login', { 
         state: { 
@@ -154,6 +161,31 @@ export default function Register() {
             </div>
           </div>
 
+          {role === 'mentor' && (
+            <div>
+              <label className="block text-sm font-medium text-purple-200 mb-2">Secret Code</label>
+              <div className="relative">
+                <Key className="absolute left-3 top-3 text-gray-400" size={20} />
+                <input
+                  type={showSecretCode ? 'text' : 'password'}
+                  value={secretCode}
+                  onChange={(e) => setSecretCode(e.target.value)}
+                  className="w-full pl-10 pr-12 py-3 bg-slate-700 border-2 border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
+                  placeholder="Enter mentor secret code"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowSecretCode(!showSecretCode)}
+                  className="absolute right-3 top-3 text-gray-400 hover:text-purple-400 transition-colors"
+                >
+                  {showSecretCode ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+              <p className="text-xs text-gray-400 mt-2">Secret code is required for mentor registration</p>
+            </div>
+          )}
+
           <button
             type="submit"
             disabled={loading}
@@ -184,7 +216,7 @@ export default function Register() {
             <p className="mb-2">Choose your role to get started:</p>
             <div className="space-y-1">
               <p><span className="text-purple-400">Student:</span> Access courses, submit assignments, track progress</p>
-              <p><span className="text-purple-400">Mentor:</span> Create content, review submissions, guide students</p>
+              <p><span className="text-purple-400">Mentor:</span> Create content, review submissions, guide students (requires secret code)</p>
             </div>
           </div>
         </div>

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LogOut, Menu, X, AlertTriangle } from 'lucide-react';
+import { LogOut, Menu, X, AlertTriangle, BookOpen, Users, CheckSquare, MessageCircle, Home, Settings } from 'lucide-react';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
@@ -24,18 +25,25 @@ export default function Navbar() {
   };
 
   const studentLinks = [
-    { label: 'Dashboard', path: '/student/dashboard' },
-    { label: 'My Entries', path: '/student/entries' },
-    { label: 'My Tasks', path: '/student/tasks' },
+    { label: 'Dashboard', path: '/student/dashboard', icon: Home },
+    { label: 'My Entries', path: '/student/entries', icon: BookOpen },
+    { label: 'My Tasks', path: '/student/tasks', icon: CheckSquare },
+    { label: 'Doubts', path: '/student/doubts', icon: MessageCircle },
   ];
 
   const mentorLinks = [
-    { label: 'Dashboard', path: '/mentor/dashboard' },
-    { label: 'Students', path: '/mentor/students' },
-    { label: 'Assign Task', path: '/mentor/tasks/assign' },
+    { label: 'Dashboard', path: '/mentor/dashboard', icon: Home },
+    { label: 'Students', path: '/mentor/students', icon: Users },
+    { label: 'Assign Task', path: '/mentor/tasks/assign', icon: CheckSquare },
+    { label: 'Task Management', path: '/mentor/tasks', icon: Settings },
   ];
 
   const links = user?.role === 'student' ? studentLinks : mentorLinks;
+
+  const isActiveLink = (path) => {
+    return location.pathname === path || 
+           (path !== '/' && location.pathname.startsWith(path));
+  };
 
   return (
     <nav className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
@@ -43,29 +51,41 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center gap-8">
             <h1 className="text-2xl font-bold">Mentor Portal</h1>
-            <div className="hidden md:flex gap-6">
-              {links.map((link) => (
-                <button
-                  key={link.path}
-                  onClick={() => navigate(link.path)}
-                  className="hover:bg-white hover:bg-opacity-20 px-3 py-2 rounded-md transition-all"
-                >
-                  {link.label}
-                </button>
-              ))}
+            <div className="hidden md:flex gap-2">
+              {links.map((link) => {
+                const Icon = link.icon;
+                const isActive = isActiveLink(link.path);
+                return (
+                  <button
+                    key={link.path}
+                    onClick={() => navigate(link.path)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
+                      isActive 
+                        ? 'bg-white/20 shadow-lg backdrop-blur-sm border border-white/30' 
+                        : 'hover:bg-white/10'
+                    }`}
+                  >
+                    <Icon size={18} />
+                    <span>{link.label}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           <div className="flex items-center gap-4">
             <div className="hidden sm:flex items-center gap-3">
-              <span className="text-sm">{user?.name}</span>
-              <span className="text-xs bg-white bg-opacity-20 px-3 py-1 rounded-full capitalize">
-                {user?.role}
-              </span>
+              <div className="text-right">
+                <span className="text-sm font-medium">{user?.name}</span>
+                <div className="text-xs opacity-75 capitalize">{user?.role}</div>
+              </div>
+              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center border border-white/30">
+                <span className="text-sm font-bold">{user?.name?.charAt(0)?.toUpperCase()}</span>
+              </div>
             </div>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition-all"
+              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               <LogOut size={18} />
               <span className="hidden sm:inline">Logout</span>
@@ -81,19 +101,28 @@ export default function Navbar() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden pb-4 space-y-2">
-            {links.map((link) => (
-              <button
-                key={link.path}
-                onClick={() => {
-                  navigate(link.path);
-                  setMobileMenuOpen(false);
-                }}
-                className="block w-full text-left px-3 py-2 hover:bg-white hover:bg-opacity-20 rounded-md"
-              >
-                {link.label}
-              </button>
-            ))}
+          <div className="md:hidden pb-4 border-t border-white/20 mt-4 pt-4 space-y-2">
+            {links.map((link) => {
+              const Icon = link.icon;
+              const isActive = isActiveLink(link.path);
+              return (
+                <button
+                  key={link.path}
+                  onClick={() => {
+                    navigate(link.path);
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`flex items-center gap-3 w-full px-4 py-3 rounded-lg transition-all duration-200 ${
+                    isActive 
+                      ? 'bg-white/20 shadow-lg backdrop-blur-sm border border-white/30' 
+                      : 'hover:bg-white/10'
+                  }`}
+                >
+                  <Icon size={20} />
+                  <span>{link.label}</span>
+                </button>
+              );
+            })}
           </div>
         )}
       </div>

@@ -30,6 +30,7 @@ export default function StudentTasks() {
   const fetchTasks = async () => {
     try {
       const response = await tasksAPI.getAll();
+      console.log('Fetched tasks:', response.data);
       setTasks(response.data);
     } catch (error) {
       console.error('Failed to fetch tasks:', error);
@@ -59,7 +60,7 @@ export default function StudentTasks() {
   };
 
   const filteredTasks = tasks.filter(task => {
-    const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = (task.title && task.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
                          (task.description && task.description.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesFilter = filterStatus === 'all' || 
                          (filterStatus === 'pending' && !task.completed) ||
@@ -162,7 +163,7 @@ export default function StudentTasks() {
 
         {/* Tasks List */}
         <div className="space-y-4">
-          {filteredTasks.length === 0 ? (
+          {!tasks || tasks.length === 0 || filteredTasks.length === 0 ? (
             <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-12 text-center">
               <BookOpen className="mx-auto text-gray-500 mb-4" size={48} />
               <p className="text-gray-400 text-lg">
@@ -193,7 +194,7 @@ export default function StudentTasks() {
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
                         <h3 className={`text-xl font-semibold mb-2 ${task.completed ? 'text-gray-400 line-through' : 'text-white'}`}>
-                          {task.title}
+                          {task.title || 'Untitled Task'}
                         </h3>
                         {task.description && (
                           <p className={`text-sm mb-3 ${task.completed ? 'text-gray-500 line-through' : 'text-gray-300'}`}>
@@ -203,7 +204,7 @@ export default function StudentTasks() {
                         <div className="flex items-center gap-4 text-sm text-gray-400">
                           <span className="flex items-center gap-1">
                             <User size={14} />
-                            {task.mentorName}
+                            Mentor ID: {task.mentorId}
                           </span>
                           {task.dueDate && (
                             <span className="flex items-center gap-1">

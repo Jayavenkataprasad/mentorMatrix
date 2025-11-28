@@ -82,9 +82,21 @@ router.get('/dashboard', authenticateToken, authorizeRole('student'), async (req
       [studentId]
     );
 
+    // Recent doubts
+    const recentDoubts = await allAsync(
+      'SELECT * FROM doubts WHERE studentId = ? ORDER BY createdAt DESC LIMIT 5',
+      [studentId]
+    );
+
     // Pending tasks
     const pendingTasks = await allAsync(
       'SELECT * FROM tasks WHERE studentId = ? AND completed = 0 ORDER BY dueDate ASC',
+      [studentId]
+    );
+
+    // Completed tasks count
+    const completedTasksCount = await getAsync(
+      'SELECT COUNT(*) as count FROM tasks WHERE studentId = ? AND completed = 1',
       [studentId]
     );
 
@@ -102,7 +114,9 @@ router.get('/dashboard', authenticateToken, authorizeRole('student'), async (req
         tags: e.tags ? JSON.parse(e.tags) : [],
         resources: e.resources ? JSON.parse(e.resources) : []
       })),
-      pendingTasks: pendingTasks || []
+      recentDoubts: recentDoubts || [],
+      pendingTasks: pendingTasks || [],
+      completedTasks: completedTasksCount?.count || 0
     });
   } catch (error) {
     console.error('Get dashboard error:', error);
