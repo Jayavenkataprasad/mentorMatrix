@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.API_BASE_URL
+const API_URL = import.meta.env.API_BASE_URL || 'https://mentormatrix.onrender.com/api'
 
 const client = axios.create({
   baseURL: API_URL,

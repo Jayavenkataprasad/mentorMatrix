@@ -14,7 +14,7 @@ export function useSocket() {
       return;
     }
 
-    // Create socket connection
+    // Create socket connection with proper configuration
     socketRef.current = io('https://mentormatrix.onrender.com', {
       auth: {
         token
@@ -22,7 +22,8 @@ export function useSocket() {
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
-      reconnectionAttempts: 5
+      reconnectionAttempts: 5,
+      transports: ['websocket', 'polling'] // Ensure proper fallback
     });
 
     // Connection event
