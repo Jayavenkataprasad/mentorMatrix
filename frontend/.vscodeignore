@@ -1,0 +1,4 @@
+**/*.ts
+**/*.tsx
+tsconfig*.json
+node_modules

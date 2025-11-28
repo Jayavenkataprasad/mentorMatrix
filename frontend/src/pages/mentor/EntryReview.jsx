@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import { entriesAPI, commentsAPI } from '../../api/client';
-import { ArrowLeft, Send, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Send, CheckCircle, HelpCircle } from 'lucide-react';
 
 export default function EntryReview() {
   const { entryId } = useParams();
@@ -76,7 +76,7 @@ export default function EntryReview() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
         <Navbar />
-        <div className="max-w-4xl mx-auto p-6">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:p-6">
           <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-12 text-center">
             <BookOpen className="mx-auto text-gray-500 mb-4" size={48} />
             <p className="text-gray-400 text-lg">Entry not found</p>
@@ -96,7 +96,7 @@ export default function EntryReview() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <Navbar />
-      <div className="max-w-4xl mx-auto p-6">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:p-6">
         <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-purple-400 hover:text-purple-300 mb-6 transition-colors"
@@ -106,7 +106,7 @@ export default function EntryReview() {
         </button>
 
         {/* Entry Content */}
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
+        <div className="bg-white rounded-lg shadow px-4 sm:px-6 lg:p-6 mb-6">
           <div className="flex justify-between items-start mb-4">
             <div>
               <h1 className="text-3xl font-bold text-white">{entry.title}</h1>
@@ -157,7 +157,7 @@ export default function EntryReview() {
         </div>
 
         {/* Status Update */}
-        <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 mb-6">
+        <div className="bg-slate-800/50 border border-slate-700 rounded-xl px-4 sm:px-6 lg:p-6 mb-6">
           <h2 className="text-lg font-semibold text-white mb-4">Update Status</h2>
           <div className="flex gap-3">
             <select
@@ -180,8 +180,51 @@ export default function EntryReview() {
           </div>
         </div>
 
+        {/* Ask Questions Section */}
+        <div className="bg-slate-800/50 border border-slate-700 rounded-xl px-4 sm:px-6 lg:p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-lg font-semibold text-white">Assessment Questions</h2>
+              <p className="text-gray-400 text-sm mt-1">Create MCQ questions to test student understanding</p>
+            </div>
+            <button
+              onClick={() => navigate(`/mentor/entries/${entryId}/mcq`)}
+              className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl transition-all"
+            >
+              <HelpCircle size={18} />
+              Ask Questions
+            </button>
+          </div>
+          
+          {entry.deadline && (
+            <div className="mt-4 p-4 bg-blue-600/20 border border-blue-500 rounded-lg">
+              <div className="flex items-center gap-2 text-blue-300">
+                <HelpCircle size={16} />
+                <span className="text-sm">
+                  Deadline for questions: {new Date(entry.deadline).toLocaleString()}
+                </span>
+              </div>
+              <p className="text-blue-200 text-xs mt-1">
+                Students can only answer questions after this deadline
+              </p>
+            </div>
+          )}
+          
+          {!entry.deadline && (
+            <div className="mt-4 p-4 bg-yellow-600/20 border border-yellow-500 rounded-lg">
+              <div className="flex items-center gap-2 text-yellow-300">
+                <HelpCircle size={16} />
+                <span className="text-sm">No deadline set for this entry</span>
+              </div>
+              <p className="text-yellow-200 text-xs mt-1">
+                Students can answer questions immediately. Consider setting a deadline for better assessment.
+              </p>
+            </div>
+          )}
+        </div>
+
         {/* Comments Section */}
-        <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+        <div className="bg-slate-800/50 border border-slate-700 rounded-xl px-4 sm:px-6 lg:p-6">
           <h2 className="text-lg font-semibold text-white mb-6">Feedback</h2>
 
           {/* Comments List */}

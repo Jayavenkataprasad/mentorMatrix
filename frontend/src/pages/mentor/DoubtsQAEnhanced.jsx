@@ -3,6 +3,7 @@ import { MessageCircle, CheckCircle, AlertCircle, Send, X, Filter, Bell, Zap, Tr
 import { api } from '../../api/client.js';
 import { PRIORITY_LEVELS } from '../../constants/subjects.js';
 import { useRealtime } from '../../context/RealtimeContext.jsx';
+import Navbar from '../../components/Navbar';
 
 export default function DoubtsQAEnhanced() {
   const [doubts, setDoubts] = useState([]);
@@ -222,13 +223,15 @@ export default function DoubtsQAEnhanced() {
   const highPriorityDoubts = doubts.filter(d => d.priority === 'high' && d.status === 'open').length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
-      <div className="max-w-7xl mx-auto">
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 px-4 sm:px-6 lg:p-6">
+        <div className="max-w-7xl mx-auto">
         {/* Header with Stats */}
         <div className="mb-8">
           <div className="flex justify-between items-start mb-6">
             <div>
-              <h1 className="text-4xl font-bold text-white mb-2">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
                 💬 Doubts & Questions Dashboard
               </h1>
               <p className="text-purple-200">Review and answer student doubts and task-related questions</p>
@@ -373,7 +376,7 @@ export default function DoubtsQAEnhanced() {
             <p className="text-gray-300 text-lg">{emptyMessage}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 transition-all duration-200">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gapx-4 sm:px-6 lg:p-6 transition-all duration-200">
             {/* List */}
             <div className="lg:col-span-1">
               <div className="space-y-3 max-h-96 overflow-y-auto">
@@ -413,7 +416,7 @@ export default function DoubtsQAEnhanced() {
               <div className="lg:col-span-2">
                 <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-2xl shadow-2xl overflow-hidden border border-purple-500/30">
                   {/* Header */}
-                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6">
+                  <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 sm:px-6 lg:p-6">
                     <div className="flex justify-between items-start">
                       <div className="flex items-start gap-3">
                         <span className="text-3xl">
@@ -443,7 +446,7 @@ export default function DoubtsQAEnhanced() {
                   </div>
 
                   {/* Content */}
-                  <div className="p-6 space-y-4 max-h-96 overflow-y-auto">
+                  <div className="px-4 sm:px-6 lg:p-6 space-y-4 max-h-96 overflow-y-auto">
                     {/* Details */}
                     <div className="bg-slate-700/50 p-4 rounded-xl border border-purple-500/20">
                       {activeTab === 'doubts' && (
@@ -757,6 +760,7 @@ export default function DoubtsQAEnhanced() {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 }

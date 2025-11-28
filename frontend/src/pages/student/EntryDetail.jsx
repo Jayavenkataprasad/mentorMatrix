@@ -58,12 +58,12 @@ export default function EntryDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900">
         <Navbar />
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
-            <p className="text-purple-200 mt-4">Loading entry...</p>
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            <p className="text-slate-500 mt-4">Loading entry...</p>
           </div>
         </div>
       </div>
@@ -72,15 +72,15 @@ export default function EntryDetail() {
 
   if (!entry) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900">
         <Navbar />
         <div className="max-w-4xl mx-auto p-6">
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-12 text-center">
-            <BookOpen className="mx-auto text-gray-500 mb-4" size={48} />
-            <p className="text-gray-400 text-lg">Entry not found</p>
+          <div className="bg-white border border-slate-200 rounded-xl p-12 text-center shadow-sm">
+            <BookOpen className="mx-auto text-slate-400 mb-4" size={48} />
+            <p className="text-slate-500 text-lg">Entry not found</p>
             <button
               onClick={() => navigate('/student/entries')}
-              className="mt-4 text-purple-400 hover:text-purple-300 text-sm transition-colors"
+              className="mt-4 text-blue-600 hover:text-blue-700 text-sm transition-colors"
             >
               Back to entries
             </button>
@@ -98,32 +98,32 @@ export default function EntryDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900">
       <Navbar />
       <div className="max-w-4xl mx-auto p-6">
         <button
           onClick={() => navigate('/student/entries')}
-          className="flex items-center gap-2 text-purple-400 hover:text-purple-300 mb-6 transition-colors"
+          className="flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6 transition-colors"
         >
           <ArrowLeft size={20} />
           Back to Entries
         </button>
 
         {/* Entry Content */}
-        <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 mb-6">
+        <div className="bg-slate-100 border border-slate-200 rounded-xl p-6 mb-6 shadow-sm">
           {editing ? (
             <div className="space-y-4">
               <input
                 type="text"
                 value={editData.title}
                 onChange={(e) => setEditData({ ...editData, title: e.target.value })}
-                className="w-full text-2xl font-bold px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:outline-none focus:border-purple-500 transition-colors"
+                className="w-full text-2xl font-bold px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-colors"
               />
               <textarea
                 value={editData.body}
                 onChange={(e) => setEditData({ ...editData, body: e.target.value })}
                 rows="8"
-                className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-xl text-white focus:outline-none focus:border-purple-500 transition-colors resize-none"
+                className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-colors resize-none"
               />
               <div className="flex gap-2">
                 <button
@@ -135,7 +135,7 @@ export default function EntryDetail() {
                 </button>
                 <button
                   onClick={() => setEditing(false)}
-                  className="flex items-center gap-2 bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-xl transition-colors"
+                  className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-900 px-4 py-2 rounded-xl transition-colors"
                 >
                   <X size={18} />
                   Cancel
@@ -146,8 +146,8 @@ export default function EntryDetail() {
             <>
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h1 className="text-3xl font-bold text-white">{entry.title}</h1>
-                  <p className="text-gray-400 text-sm mt-2">{new Date(entry.createdAt).toLocaleString()}</p>
+                  <h1 className="text-3xl font-bold text-slate-900">{entry.title}</h1>
+                  <p className="text-slate-500 text-sm mt-2">{new Date(entry.createdAt).toLocaleString()}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className={`px-3 py-1 rounded-full text-sm font-medium capitalize ${statusColors[entry.status]}`}>
@@ -155,7 +155,7 @@ export default function EntryDetail() {
                   </span>
                   <button
                     onClick={() => setEditing(true)}
-                    className="flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors"
+                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
                   >
                     <Edit2 size={18} />
                   </button>
@@ -163,15 +163,15 @@ export default function EntryDetail() {
               </div>
 
               <div className="prose max-w-none mb-6">
-                <p className="text-gray-300 whitespace-pre-wrap">{entry.body}</p>
+                <p className="text-slate-700 whitespace-pre-wrap">{entry.body}</p>
               </div>
 
               {entry.tags?.length > 0 && (
                 <div className="mb-4">
-                  <h3 className="text-sm font-semibold text-purple-200 mb-2">Tags</h3>
+                  <h3 className="text-sm font-semibold text-slate-700 mb-2">Tags</h3>
                   <div className="flex flex-wrap gap-2">
                     {entry.tags.map(tag => (
-                      <span key={tag} className="bg-purple-600/20 text-purple-300 border border-purple-500 text-sm px-3 py-1 rounded-full">
+                      <span key={tag} className="bg-purple-50 text-purple-700 border border-purple-200 text-sm px-3 py-1 rounded-full">
                         {tag}
                       </span>
                     ))}
@@ -181,7 +181,7 @@ export default function EntryDetail() {
 
               {entry.resources?.length > 0 && (
                 <div>
-                  <h3 className="text-sm font-semibold text-purple-200 mb-2">Resources</h3>
+                  <h3 className="text-sm font-semibold text-slate-700 mb-2">Resources</h3>
                   <div className="space-y-2">
                     {entry.resources.map(resource => (
                       <a
@@ -189,7 +189,7 @@ export default function EntryDetail() {
                         href={resource}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-purple-400 hover:text-purple-300 text-sm block transition-colors"
+                        className="text-blue-600 hover:text-blue-700 text-sm block transition-colors"
                       >
                         {resource}
                       </a>
@@ -202,8 +202,8 @@ export default function EntryDetail() {
         </div>
 
         {/* Comments Section */}
-        <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
-          <h2 className="text-2xl font-bold text-white mb-6">Mentor Feedback</h2>
+        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+          <h2 className="text-2xl font-bold text-slate-900 mb-6">Mentor Feedback</h2>
 
           {/* Comments List */}
           <div className="space-y-4 mb-6">
@@ -211,20 +211,20 @@ export default function EntryDetail() {
               comments.map(comment => (
                 <div key={comment.id} className="bg-slate-700/30 p-4 rounded-lg border border-slate-600">
                   <div className="flex justify-between items-start mb-2">
-                    <p className="font-semibold text-white">{comment.mentorName}</p>
-                    <span className="text-xs text-gray-400">{new Date(comment.createdAt).toLocaleString()}</span>
+                    <p className="font-semibold text-slate-900">{comment.mentorName}</p>
+                    <span className="text-xs text-slate-500">{new Date(comment.createdAt).toLocaleString()}</span>
                   </div>
-                  <p className="text-gray-300">{comment.message}</p>
+                  <p className="text-slate-700">{comment.message}</p>
                 </div>
               ))
             ) : (
-              <p className="text-gray-400 text-center py-4">No feedback yet. Check back soon!</p>
+              <p className="text-slate-500 text-center py-4">No feedback yet. Check back soon!</p>
             )}
           </div>
 
           {/* Add Comment (for mentors only - read-only for students) */}
-          <div className="pt-4 border-t border-slate-600">
-            <p className="text-sm text-gray-400">Your mentor will provide feedback here</p>
+          <div className="pt-4 border-t border-slate-200">
+            <p className="text-sm text-slate-500">Your mentor will provide feedback here</p>
           </div>
         </div>
       </div>

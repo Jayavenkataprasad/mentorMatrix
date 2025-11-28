@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CheckCircle, Plus, Clock, User, BookOpen, AlertCircle, Play, X, Search, Filter } from 'lucide-react';
 import { api } from '../../api/client.js';
 import { useRealtime } from '../../context/RealtimeContext.jsx';
+import Navbar from '../../components/Navbar';
 
 export default function CompletedTasks() {
   const [completedTasks, setCompletedTasks] = useState([]);
@@ -102,7 +103,8 @@ export default function CompletedTasks() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-        <div className="max-w-6xl mx-auto p-6">
+        <Navbar />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:p-6">
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
             <p className="text-purple-200 mt-4">Loading completed tasks...</p>
@@ -114,10 +116,11 @@ export default function CompletedTasks() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      <div className="max-w-6xl mx-auto p-6">
+      <Navbar />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:p-6">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 flex items-center gap-3">
             <CheckCircle className="text-green-400" />
             Completed Tasks
           </h1>
@@ -151,7 +154,7 @@ export default function CompletedTasks() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+          <div className="bg-slate-800/50 border border-slate-700 rounded-xl px-4 sm:px-6 lg:p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-purple-200 text-sm mb-1">Total Completed</p>
@@ -160,7 +163,7 @@ export default function CompletedTasks() {
               <CheckCircle className="text-green-400" size={32} />
             </div>
           </div>
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+          <div className="bg-slate-800/50 border border-slate-700 rounded-xl px-4 sm:px-6 lg:p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-purple-200 text-sm mb-1">With Questions</p>
@@ -171,7 +174,7 @@ export default function CompletedTasks() {
               <BookOpen className="text-blue-400" size={32} />
             </div>
           </div>
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+          <div className="bg-slate-800/50 border border-slate-700 rounded-xl px-4 sm:px-6 lg:p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-purple-200 text-sm mb-1">Answered Questions</p>
@@ -202,7 +205,7 @@ export default function CompletedTasks() {
             filteredTasks.map(task => (
               <div
                 key={task.id}
-                className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 hover:bg-slate-700/30 transition-all"
+                className="bg-slate-800/50 border border-slate-700 rounded-xl px-4 sm:px-6 lg:p-6 hover:bg-slate-700/30 transition-all"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
@@ -268,9 +271,9 @@ export default function CompletedTasks() {
 
         {/* Question Form Modal */}
         {selectedTask && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center px-4 sm:px-6 lg:p-6 z-50">
             <div className="bg-slate-800 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="p-6">
+              <div className="px-4 sm:px-6 lg:p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-2xl font-bold text-white">
                     Ask Questions - {selectedTask.title}

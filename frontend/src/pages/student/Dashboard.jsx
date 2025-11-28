@@ -41,12 +41,14 @@ export default function StudentDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900">
         <Navbar />
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
-            <p className="text-purple-200 mt-4">Loading dashboard...</p>
+            <div className="bg-gradient-to-br from-sky-100/50 to-blue-100/30 border border-sky-200/50 rounded-xl p-6 backdrop-blur-sm">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            </div>
+            <p className="text-white mt-4">Loading dashboard...</p>
           </div>
         </div>
       </div>
@@ -60,62 +62,62 @@ export default function StudentDashboard() {
   })) || [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900">
       <Navbar />
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:p-6">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Student Dashboard</h1>
-          <p className="text-purple-200">Welcome back! Track your learning progress</p>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">Student Dashboard</h1>
+          <p className="text-white">Welcome back! Track your learning progress</p>
         </div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 hover:bg-slate-700/30 transition-all">
+          <div className="bg-gradient-to-br from-purple-800/50 to-indigo-800/50 backdrop-blur-xl border border-purple-600/50 rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
             <div className="flex items-center justify-between mb-4">
               <BookOpen className="text-blue-400" size={24} />
               <span className="text-xs text-purple-300 font-medium">Total</span>
             </div>
             <p className="text-3xl font-bold text-white">{dashboard?.totalEntries || 0}</p>
-            <p className="text-sm text-gray-400 mt-1">Learning Entries</p>
+            <p className="text-sm font-semibold text-white drop-shadow-md mt-1 dashboard-stats-text">Learning Entries</p>
           </div>
 
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 hover:bg-slate-700/30 transition-all">
+          <div className="bg-gradient-to-br from-purple-800/50 to-indigo-800/50 backdrop-blur-xl border border-purple-600/50 rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
             <div className="flex items-center justify-between mb-4">
               <Flame className="text-orange-400" size={24} />
               <span className="text-xs text-purple-300 font-medium">Streak</span>
             </div>
             <p className="text-3xl font-bold text-white">{dashboard?.currentStreak || 0}</p>
-            <p className="text-sm text-gray-400 mt-1">Day Streak</p>
+            <p className="text-sm font-semibold text-white drop-shadow-md dashboard-stats-text">Day Streak</p>
           </div>
 
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 hover:bg-slate-700/30 transition-all">
+          <div className="bg-gradient-to-br from-purple-800/50 to-indigo-800/50 backdrop-blur-xl border border-purple-600/50 rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
             <div className="flex items-center justify-between mb-4">
               <CheckCircle className="text-green-400" size={24} />
               <span className="text-xs text-purple-300 font-medium">Completed</span>
             </div>
             <p className="text-3xl font-bold text-white">{dashboard?.completedTasks || 0}</p>
-            <p className="text-sm text-gray-400 mt-1">Tasks Done</p>
+            <p className="text-sm font-semibold text-white drop-shadow-md dashboard-stats-text">Tasks Done</p>
           </div>
 
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 hover:bg-slate-700/30 transition-all">
+          <div className="bg-gradient-to-br from-purple-800/50 to-indigo-800/50 backdrop-blur-xl border border-purple-600/50 rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
             <div className="flex items-center justify-between mb-4">
               <MessageCircle className="text-purple-400" size={24} />
               <span className="text-xs text-purple-300 font-medium">Active</span>
             </div>
             <p className="text-3xl font-bold text-white">{dashboard?.totalDoubts - dashboard?.resolvedDoubts || 0}</p>
-            <p className="text-sm text-gray-400 mt-1">Doubts</p>
+            <p className="text-sm font-semibold text-white drop-shadow-md dashboard-stats-text">Doubts</p>
           </div>
         </div>
 
         {/* Weekly Activity Chart */}
-        <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 mb-8">
+        <div className="bg-gradient-to-br from-purple-800/50 to-indigo-800/50 backdrop-blur-xl border border-purple-600/50 rounded-xl p-6 mb-8 shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-white flex items-center gap-2">
               <TrendingUp className="text-blue-400" size={20} />
               Weekly Activity
             </h2>
-            <span className="text-sm text-gray-400">Last 7 days</span>
+            <span className="text-sm font-semibold text-white drop-shadow-md">Last 7 days</span>
           </div>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={chartData}>
@@ -146,7 +148,7 @@ export default function StudentDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <button
             onClick={() => navigate('/student/entries/create')}
-            className="bg-purple-600 hover:bg-purple-700 text-white rounded-xl p-6 transition-colors group"
+            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl p-6 transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-[1.02]"
           >
             <Plus className="mb-3 group-hover:scale-110 transition-transform" size={24} />
             <p className="font-semibold">New Entry</p>
@@ -155,7 +157,7 @@ export default function StudentDashboard() {
 
           <button
             onClick={() => navigate('/student/tasks')}
-            className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-6 transition-colors group"
+            className="bg-gradient-to-br from-purple-800/50 to-indigo-800/50 backdrop-blur-xl hover:from-purple-700/50 hover:to-indigo-700/50 text-white rounded-xl p-6 transition-all duration-300 group border border-purple-600/50 shadow-sm hover:shadow-md hover:scale-[1.02]"
           >
             <CheckCircle className="mb-3 group-hover:scale-110 transition-transform" size={24} />
             <p className="font-semibold">My Tasks</p>
@@ -164,7 +166,7 @@ export default function StudentDashboard() {
 
           <button
             onClick={() => navigate('/student/doubts')}
-            className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-6 transition-colors group"
+            className="bg-gradient-to-br from-purple-800/50 to-indigo-800/50 backdrop-blur-xl hover:from-purple-700/50 hover:to-indigo-700/50 text-white rounded-xl p-6 transition-all duration-300 group border border-purple-600/50 shadow-sm hover:shadow-md hover:scale-[1.02]"
           >
             <HelpCircle className="mb-3 group-hover:scale-110 transition-transform" size={24} />
             <p className="font-semibold">Ask Doubt</p>
@@ -173,7 +175,7 @@ export default function StudentDashboard() {
 
           <button
             onClick={() => navigate('/student/entries')}
-            className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-6 transition-colors group"
+            className="bg-gradient-to-br from-purple-800/50 to-indigo-800/50 backdrop-blur-xl hover:from-purple-700/50 hover:to-indigo-700/50 text-white rounded-xl p-6 transition-all duration-300 group border border-purple-600/50 shadow-sm hover:shadow-md hover:scale-[1.02]"
           >
             <BookOpen className="mb-3 group-hover:scale-110 transition-transform" size={24} />
             <p className="font-semibold">View Entries</p>
@@ -184,17 +186,17 @@ export default function StudentDashboard() {
         {/* Recent Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Recent Entries */}
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+          <div className="bg-gradient-to-br from-purple-800/50 to-indigo-800/50 backdrop-blur-xl border border-purple-600/50 rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-white">Recent Entries</h2>
-              <Calendar className="text-gray-400" size={20} />
+              <Calendar className="text-slate-400" size={20} />
             </div>
             {dashboard?.recentEntries?.length > 0 ? (
               <div className="space-y-3">
                 {dashboard.recentEntries.slice(0, 3).map(entry => (
-                  <div key={entry.id} className="bg-slate-700/30 p-3 rounded-lg">
+                  <div key={entry.id} className="bg-gradient-to-br from-white/60 to-white/40 backdrop-blur-sm p-3 rounded-lg border border-white/20">
                     <p className="text-white font-medium">{entry.title}</p>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm font-semibold text-white drop-shadow-md">
                       {new Date(entry.createdAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -202,11 +204,11 @@ export default function StudentDashboard() {
               </div>
             ) : (
               <div className="text-center py-8">
-                <BookOpen className="mx-auto text-gray-500 mb-2" size={32} />
-                <p className="text-gray-400">No entries yet</p>
+                <BookOpen className="mx-auto text-slate-400 mb-2" size={32} />
+                <p className="text-white">No entries yet</p>
                 <button
                   onClick={() => navigate('/student/entries/create')}
-                  className="mt-3 text-purple-400 hover:text-purple-300 text-sm"
+                  className="mt-3 text-blue-600 hover:text-blue-700 text-sm"
                 >
                   Create your first entry
                 </button>
@@ -215,21 +217,21 @@ export default function StudentDashboard() {
           </div>
 
           {/* Recent Doubts */}
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+          <div className="bg-gradient-to-br from-sky-100/50 to-blue-100/30 border border-sky-200/50 rounded-xl p-6 backdrop-blur-sm">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-white">Recent Doubts</h2>
-              <MessageCircle className="text-gray-400" size={20} />
+              <MessageCircle className="text-slate-400" size={20} />
             </div>
             {dashboard?.recentDoubts?.filter(doubt => doubt.status !== 'resolved').length > 0 ? (
               <div className="space-y-3">
                 {dashboard.recentDoubts.filter(doubt => doubt.status !== 'resolved').slice(0, 3).map(doubt => (
-                  <div key={doubt.id} className="bg-slate-700/30 p-3 rounded-lg">
+                  <div key={doubt.id} className="bg-gradient-to-br from-white/60 to-white/40 backdrop-blur-sm p-3 rounded-lg border border-white/20">
                     <p className="text-white font-medium">{doubt.question}</p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs px-2 py-1 rounded-full bg-yellow-600/20 text-yellow-300">
+                    <div className="flex items-center gap-2 dashboard-stats-text">
+                      <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-700">
                         {doubt.status}
                       </span>
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-white">
                         {new Date(doubt.createdAt).toLocaleDateString()}
                       </span>
                     </div>
@@ -238,11 +240,11 @@ export default function StudentDashboard() {
               </div>
             ) : (
               <div className="text-center py-8">
-                <HelpCircle className="mx-auto text-gray-500 mb-2" size={32} />
-                <p className="text-gray-400">No unresolved doubts</p>
+                <HelpCircle className="mx-auto text-slate-400 mb-2" size={32} />
+                <p className="text-white">No unresolved doubts</p>
                 <button
                   onClick={() => navigate('/student/doubts')}
-                  className="mt-3 text-purple-400 hover:text-purple-300 text-sm"
+                  className="mt-3 text-blue-600 hover:text-blue-700 text-sm"
                 >
                   View all doubts
                 </button>

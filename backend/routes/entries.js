@@ -7,7 +7,7 @@ const router = express.Router();
 // Create entry (student only)
 router.post('/', authenticateToken, authorizeRole('student'), async (req, res) => {
   try {
-    const { title, body, tags, resources } = req.body;
+    const { title, body, tags, resources, deadline } = req.body;
     const studentId = req.user.id;
 
     if (!title || !body) {
@@ -18,8 +18,8 @@ router.post('/', authenticateToken, authorizeRole('student'), async (req, res) =
     const resourcesStr = resources ? JSON.stringify(resources) : null;
 
     const result = await runAsync(
-      'INSERT INTO entries (studentId, title, body, tags, resources) VALUES (?, ?, ?, ?, ?)',
-      [studentId, title, body, tagsStr, resourcesStr]
+      'INSERT INTO entries (studentId, title, body, tags, resources, deadline) VALUES (?, ?, ?, ?, ?, ?)',
+      [studentId, title, body, tagsStr, resourcesStr, deadline || null]
     );
 
     res.status(201).json({
@@ -29,6 +29,7 @@ router.post('/', authenticateToken, authorizeRole('student'), async (req, res) =
       body,
       tags: tags || [],
       resources: resources || [],
+      deadline,
       status: 'pending',
       createdAt: new Date().toISOString()
     });
@@ -122,7 +123,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
 router.put('/:id', authenticateToken, authorizeRole('student'), async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, body, tags, resources } = req.body;
+    const { title, body, tags, resources, deadline } = req.body;
     const userId = req.user.id;
 
     const entry = await getAsync('SELECT * FROM entries WHERE id = ?', [id]);
@@ -136,10 +137,21 @@ router.put('/:id', authenticateToken, authorizeRole('student'), async (req, res)
 
     const tagsStr = tags ? JSON.stringify(tags) : entry.tags;
     const resourcesStr = resources ? JSON.stringify(resources) : entry.resources;
-
+    
+    // Build update query dynamically based on provided fields
+    let updateFields = ['title = ?', 'body = ?', 'tags = ?', 'resources = ?', 'updatedAt = CURRENT_TIMESTAMP'];
+    let updateValues = [title || entry.title, body || entry.body, tagsStr, resourcesStr];
+    
+    if (deadline !== undefined) {
+      updateFields.push('deadline = ?');
+      updateValues.push(deadline || null);
+    }
+    
+    updateValues.push(id);
+    
     await runAsync(
-      'UPDATE entries SET title = ?, body = ?, tags = ?, resources = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?',
-      [title || entry.title, body || entry.body, tagsStr, resourcesStr, id]
+      `UPDATE entries SET ${updateFields.join(', ')} WHERE id = ?`,
+      updateValues
     );
 
     res.json({ message: 'Entry updated successfully' });

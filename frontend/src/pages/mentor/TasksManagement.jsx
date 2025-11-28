@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle, Clock, Plus, Trash2, MessageCircle, Eye, X } from 'lucide-react';
 import { api } from '../../api/client.js';
+import Navbar from '../../components/Navbar';
 
 export default function TasksManagement() {
   const [tasks, setTasks] = useState([]);
@@ -108,12 +109,14 @@ export default function TasksManagement() {
   const completedTasks = tasks.filter(t => t.completed);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
-      <div className="max-w-7xl mx-auto">
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 px-4 sm:px-6 lg:p-6">
+        <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-white">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
               Task Management
             </h1>
             <p className="text-purple-200 mt-2">Assign tasks and ask questions about completed tasks</p>
@@ -129,7 +132,7 @@ export default function TasksManagement() {
 
         {/* Create Task Form */}
         {showForm && (
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 mb-8 border-l-4 border-purple-600">
+          <div className="bg-slate-800/50 border border-slate-700 rounded-xl px-4 sm:px-6 lg:p-6 mb-8 border-l-4 border-purple-600">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold text-white">Assign New Task</h2>
               <button
@@ -218,7 +221,7 @@ export default function TasksManagement() {
               {pendingTasks.map(task => (
                 <div
                   key={task.id}
-                  className="bg-slate-800/50 border border-slate-700 rounded-xl hover:bg-slate-700/30 transition-all border-l-4 border-orange-600 p-6"
+                  className="bg-slate-800/50 border border-slate-700 rounded-xl hover:bg-slate-700/30 transition-all border-l-4 border-orange-600 px-4 sm:px-6 lg:p-6"
                 >
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
@@ -269,7 +272,7 @@ export default function TasksManagement() {
               {completedTasks.map(task => (
                 <div
                   key={task.id}
-                  className="bg-slate-800/50 border border-slate-700 rounded-xl hover:bg-slate-700/30 transition-all border-l-4 border-green-600 p-6"
+                  className="bg-slate-800/50 border border-slate-700 rounded-xl hover:bg-slate-700/30 transition-all border-l-4 border-green-600 px-4 sm:px-6 lg:p-6"
                 >
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
@@ -314,7 +317,7 @@ export default function TasksManagement() {
       {selectedTask && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-slate-800 border border-slate-700 rounded-xl shadow-2xl max-w-2xl w-full">
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 flex justify-between items-center">
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 sm:px-6 lg:p-6 flex justify-between items-center">
               <div>
                 <h2 className="text-2xl font-bold">{selectedTask.title}</h2>
                 <p className="text-purple-200 mt-1">Ask questions to verify learning</p>
@@ -327,7 +330,7 @@ export default function TasksManagement() {
               </button>
             </div>
 
-            <div className="p-6 space-y-4">
+            <div className="px-4 sm:px-6 lg:p-6 space-y-4">
               <div className="bg-slate-700/30 p-4 rounded-lg border border-slate-600">
                 <p className="text-gray-300 mt-1">
                   <span className="font-semibold">Student:</span> {getStudentName(selectedTask.studentId)}
@@ -373,5 +376,6 @@ export default function TasksManagement() {
         </div>
       )}
     </div>
+    </>
   );
 }

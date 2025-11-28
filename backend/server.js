@@ -14,6 +14,7 @@ import schedulesRoutes from './routes/schedules.js';
 import doubtsRoutes from './routes/doubts.js';
 import taskQuestionsRoutes from './routes/task-questions.js';
 import usersRoutes from './routes/users.js';
+import mcqRoutes from './routes/mcq.js';
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ app.use('/api/tasks', tasksRoutes);
 app.use('/api/schedules', schedulesRoutes);
 app.use('/api/doubts', doubtsRoutes);
 app.use('/api/task-questions', taskQuestionsRoutes);
+app.use('/api/mcq', mcqRoutes);
 app.use('/api/mentor', mentorRoutes);
 app.use('/api/student', studentRoutes);
 app.use('/api/users', usersRoutes);

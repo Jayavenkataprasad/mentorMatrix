@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, MessageCircle, CheckCircle, Clock, Trash2, Send, X } from 'lucide-react';
 import { api } from '../../api/client.js';
+import Navbar from '../../components/Navbar';
 
 export default function Doubts() {
   const [doubts, setDoubts] = useState([]);
@@ -82,12 +83,14 @@ export default function Doubts() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-6">
-      <div className="max-w-7xl mx-auto">
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               My Doubts
             </h1>
             <p className="text-gray-600 mt-2">Ask questions and get clarification from your mentor</p>
@@ -280,5 +283,7 @@ export default function Doubts() {
         </div>
       )}
     </div>
+      </div>
+    </>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MessageCircle, Plus, Search, Filter, Clock, CheckCircle, AlertCircle, Star, HelpCircle, BookOpen, Briefcase, Paperclip } from 'lucide-react';
+import Navbar from '../../components/Navbar';
 import { api } from '../../api/client.js';
 import { useRealtime } from '../../context/RealtimeContext.jsx';
 import DoubtForm from './DoubtForm.jsx';
@@ -122,11 +123,12 @@ export default function DoubtsSession() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
-            <p className="text-purple-200 mt-4">Loading doubts...</p>
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900">
+        <Navbar />
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center py-16">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500"></div>
+            <p className="text-slate-500 mt-4">Loading doubts...</p>
           </div>
         </div>
       </div>
@@ -134,8 +136,9 @@ export default function DoubtsSession() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900">
+      <Navbar />
+      <div className="max-w-6xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
@@ -149,7 +152,7 @@ export default function DoubtsSession() {
         <div className="mb-6">
           <button
             onClick={() => setShowForm(true)}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl hover:shadow-lg font-semibold flex items-center gap-2"
+            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-xl hover:shadow-lg font-semibold flex items-center gap-2"
           >
             <Plus size={20} />
             Ask a New Doubt
@@ -165,13 +168,13 @@ export default function DoubtsSession() {
               placeholder="Search doubts..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
+              className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             />
           </div>
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-purple-500"
+            className="px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           >
             <option value="all">All Status</option>
             <option value="open">Open</option>
@@ -182,7 +185,7 @@ export default function DoubtsSession() {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-purple-500"
+            className="px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           >
             <option value="all">All Types</option>
             <option value="concept">Concept</option>
@@ -193,9 +196,9 @@ export default function DoubtsSession() {
         {/* Doubts List */}
         <div className="space-y-4">
           {filteredDoubts.length === 0 ? (
-            <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-12 text-center">
-              <HelpCircle className="mx-auto text-gray-500 mb-4" size={48} />
-              <p className="text-gray-400">
+            <div className="bg-white border border-slate-200 rounded-xl p-12 text-center shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+              <HelpCircle className="mx-auto text-slate-400 mb-4" size={48} />
+              <p className="text-slate-500">
                 {searchTerm || filterStatus !== 'all' || filterType !== 'all'
                   ? 'No doubts found matching your filters.'
                   : 'No doubts yet. Ask your first question!'}
@@ -205,24 +208,24 @@ export default function DoubtsSession() {
             filteredDoubts.map(doubt => (
               <div
                 key={doubt.id}
-                className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 hover:bg-slate-700/30 transition-all cursor-pointer"
+                className="bg-white border border-slate-200 rounded-xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                 onClick={() => fetchDoubtDetails(doubt.id)}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       {getTypeIcon(doubt.doubtType)}
-                      <h3 className="text-white font-semibold text-lg">{doubt.concept}</h3>
+                      <h3 className="text-slate-900 font-semibold text-lg">{doubt.concept}</h3>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusBadge(doubt.status)}`}>
                         {getStatusIcon(doubt.status)}
                         <span className="ml-1">{doubt.status.replace('_', ' ')}</span>
                       </span>
                     </div>
-                    <p className="text-gray-300 mb-3">{doubt.question}</p>
+                    <p className="text-slate-700 mb-3">{doubt.question}</p>
                     {doubt.description && (
-                      <p className="text-gray-400 text-sm mb-3">{doubt.description}</p>
+                      <p className="text-slate-500 text-sm mb-3">{doubt.description}</p>
                     )}
-                    <div className="flex items-center gap-4 text-sm text-gray-400">
+                    <div className="flex items-center gap-4 text-sm text-slate-500">
                       <span className="flex items-center gap-1">
                         <Clock size={14} />
                         {formatDate(doubt.createdAt)}
@@ -234,9 +237,9 @@ export default function DoubtsSession() {
                   </div>
                   <div className="ml-4">
                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      doubt.priority === 'high' ? 'bg-red-600/20 text-red-300' :
-                      doubt.priority === 'medium' ? 'bg-yellow-600/20 text-yellow-300' :
-                      'bg-blue-600/20 text-blue-300'
+                      doubt.priority === 'high' ? 'bg-red-100 text-red-700' :
+                      doubt.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                      'bg-blue-100 text-blue-700'
                     }`}>
                       {doubt.priority} priority
                     </span>
@@ -245,16 +248,16 @@ export default function DoubtsSession() {
 
                 {/* Answers Preview */}
                 {doubt.answers && doubt.answers.length > 0 && (
-                  <div className="border-t border-slate-700 pt-4 mt-4">
-                    <p className="text-sm text-gray-400 mb-2">
+                  <div className="border-t border-slate-200 pt-4 mt-4">
+                    <p className="text-sm text-slate-500 mb-2">
                       {doubt.answers.length} {doubt.answers.length === 1 ? 'answer' : 'answers'}
                     </p>
                     {doubt.answers[0] && (
-                      <div className="bg-green-600/10 border-l-4 border-green-500 p-3 rounded">
-                        <p className="text-green-300 text-sm font-medium mb-1">
+                      <div className="bg-emerald-50 border-l-4 border-emerald-400 p-3 rounded">
+                        <p className="text-emerald-700 text-sm font-medium mb-1">
                           {doubt.answers[0].mentorName}
                         </p>
-                        <p className="text-gray-300 text-sm line-clamp-2">
+                        <p className="text-slate-600 text-sm line-clamp-2">
                           {doubt.answers[0].answer}
                         </p>
                       </div>
@@ -268,14 +271,14 @@ export default function DoubtsSession() {
 
         {/* Doubt Detail Modal */}
         {selectedDoubt && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50">
-            <div className="bg-slate-800 border border-slate-700 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-6 z-50">
+            <div className="bg-white border border-slate-200 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transform transition-all duration-300">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-white">{selectedDoubt.concept}</h2>
+                  <h2 className="text-2xl font-bold text-slate-900">{selectedDoubt.concept}</h2>
                   <button
                     onClick={() => setSelectedDoubt(null)}
-                    className="text-gray-400 hover:text-white"
+                    className="text-slate-400 hover:text-slate-700 transition-colors"
                   >
                     <AlertCircle size={24} />
                   </button>
@@ -289,18 +292,18 @@ export default function DoubtsSession() {
                       <span className="ml-1">{selectedDoubt.status.replace('_', ' ')}</span>
                     </span>
                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      selectedDoubt.priority === 'high' ? 'bg-red-600/20 text-red-300' :
-                      selectedDoubt.priority === 'medium' ? 'bg-yellow-600/20 text-yellow-300' :
-                      'bg-blue-600/20 text-blue-300'
+                      selectedDoubt.priority === 'high' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                      selectedDoubt.priority === 'medium' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                      'bg-sky-50 text-sky-700 border border-sky-200'
                     }`}>
                       {selectedDoubt.priority} priority
                     </span>
                   </div>
-                  <p className="text-gray-200 text-lg mb-3">{selectedDoubt.question}</p>
+                  <p className="text-slate-700 text-lg mb-3">{selectedDoubt.question}</p>
                   {selectedDoubt.description && (
-                    <p className="text-gray-300 mb-4">{selectedDoubt.description}</p>
+                    <p className="text-slate-600 mb-4">{selectedDoubt.description}</p>
                   )}
-                  <div className="flex items-center gap-4 text-sm text-gray-400">
+                  <div className="flex items-center gap-4 text-sm text-slate-500">
                     <span>Asked {formatDate(selectedDoubt.createdAt)}</span>
                     {selectedDoubt.subject && <span>Subject: {selectedDoubt.subject}</span>}
                     {selectedDoubt.techStack && <span>Tech: {selectedDoubt.techStack}</span>}
@@ -310,16 +313,16 @@ export default function DoubtsSession() {
                 {/* Answers */}
                 {selectedDoubt.answers && selectedDoubt.answers.length > 0 && (
                   <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-white">Answers</h3>
+                    <h3 className="text-lg font-semibold text-slate-900">Answers</h3>
                     {selectedDoubt.answers.map(answer => (
-                      <div key={answer.id} className="bg-green-600/10 border-l-4 border-green-500 p-4 rounded">
+                      <div key={answer.id} className="bg-emerald-50 border-l-4 border-emerald-400 p-4 rounded">
                         <div className="flex items-center justify-between mb-2">
-                          <p className="text-green-300 font-medium">{answer.mentorName}</p>
-                          <span className="text-xs text-gray-400">{formatDate(answer.createdAt)}</span>
+                          <p className="font-medium text-emerald-800">{answer.mentorName}</p>
+                          <span className="text-xs text-slate-500">{formatDate(answer.createdAt)}</span>
                         </div>
-                        <p className="text-gray-200 mb-3">{answer.answer}</p>
+                        <p className="text-slate-700 mb-3">{answer.answer}</p>
                         {answer.resources && (
-                          <p className="text-sm text-gray-400 mb-3">📚 Resources: {answer.resources}</p>
+                          <p className="text-sm text-slate-500 mb-3">📚 Resources: {answer.resources}</p>
                         )}
                         {answer.voiceNoteUrl && (
                           <div className="mb-3">
@@ -332,7 +335,7 @@ export default function DoubtsSession() {
                         )}
                         {answer.attachments && (
                           <div className="mb-3">
-                            <p className="text-sm text-gray-400 mb-2">📎 Attachments:</p>
+                            <p className="text-sm text-slate-500 mb-2">📎 Attachments:</p>
                             {Array.isArray(JSON.parse(answer.attachments || '[]')) && 
                               JSON.parse(answer.attachments).map((file, index) => (
                                 <div key={index} className="flex items-center gap-2 mb-1">
@@ -340,7 +343,7 @@ export default function DoubtsSession() {
                                   <a 
                                     href={file.url} 
                                     download={file.name}
-                                    className="text-blue-400 hover:text-blue-300 text-sm underline"
+                                    className="text-sky-600 hover:text-sky-700 text-sm underline"
                                   >
                                     {file.name}
                                   </a>
@@ -349,11 +352,9 @@ export default function DoubtsSession() {
                             }
                           </div>
                         )}
-                        
-                        {/* Rating Section */}
                         {selectedDoubt.status === 'answered' && (
-                          <div className="mt-4 pt-4 border-t border-green-700/30">
-                            <p className="text-sm text-gray-400 mb-2">Was this answer helpful?</p>
+                          <div className="mt-4 pt-4 border-t border-emerald-200">
+                            <p className="text-sm text-slate-500 mb-2">Was this answer helpful?</p>
                             <div className="flex items-center gap-2">
                               {[1, 2, 3, 4, 5].map(star => (
                                 <button

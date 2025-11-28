@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Users, UserPlus, Mail, Calendar, Search, GraduationCap } from 'lucide-react';
 import { api } from '../../api/client.js';
 import { useRealtime } from '../../context/RealtimeContext.jsx';
+import Navbar from '../../components/Navbar';
 
 export default function StudentsList() {
   const [students, setStudents] = useState([]);
@@ -48,7 +49,7 @@ export default function StudentsList() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 px-4 sm:px-6 lg:p-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
@@ -60,11 +61,13 @@ export default function StudentsList() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
-      <div className="max-w-6xl mx-auto">
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 px-4 sm:px-6 lg:p-6">
+        <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 flex items-center gap-3">
             <GraduationCap className="text-purple-400" />
             Students List
           </h1>
@@ -72,8 +75,8 @@ export default function StudentsList() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 rounded-xl p-6 transition-all duration-300 hover:shadow-xl hover:scale-105">
+        <div className="grid grid-cols-1 md:grid-cols-3 gapx-4 sm:px-6 lg:p-6 mb-8">
+          <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 rounded-xl px-4 sm:px-6 lg:p-6 transition-all duration-300 hover:shadow-xl hover:scale-105">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-purple-300 text-sm">Total Students</p>
@@ -82,7 +85,7 @@ export default function StudentsList() {
               <Users className="text-purple-400" size={32} />
             </div>
           </div>
-          <div className="bg-gradient-to-r from-blue-600/20 to-cyan-600/20 border border-blue-500/30 rounded-xl p-6 transition-all duration-300 hover:shadow-xl hover:scale-105">
+          <div className="bg-gradient-to-r from-blue-600/20 to-cyan-600/20 border border-blue-500/30 rounded-xl px-4 sm:px-6 lg:p-6 transition-all duration-300 hover:shadow-xl hover:scale-105">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-blue-300 text-sm">New This Week</p>
@@ -97,7 +100,7 @@ export default function StudentsList() {
               <UserPlus className="text-blue-400" size={32} />
             </div>
           </div>
-          <div className="bg-gradient-to-r from-green-600/20 to-emerald-600/20 border border-green-500/30 rounded-xl p-6 transition-all duration-300 hover:shadow-xl hover:scale-105">
+          <div className="bg-gradient-to-r from-green-600/20 to-emerald-600/20 border border-green-500/30 rounded-xl px-4 sm:px-6 lg:p-6 transition-all duration-300 hover:shadow-xl hover:scale-105">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-green-300 text-sm">Active Today</p>
@@ -129,7 +132,7 @@ export default function StudentsList() {
 
         {/* Students List */}
         <div className="bg-slate-800/50 border border-slate-700 rounded-xl overflow-hidden">
-          <div className="p-6 border-b border-slate-700">
+          <div className="px-4 sm:px-6 lg:p-6 border-b border-slate-700">
             <h2 className="text-xl font-semibold text-white">Registered Students</h2>
           </div>
           {filteredStudents.length === 0 ? (
@@ -144,7 +147,7 @@ export default function StudentsList() {
               {filteredStudents.map((student, index) => (
                 <div
                   key={student.id}
-                  className="p-6 hover:bg-slate-700/30 transition-all duration-200 flex items-center justify-between group"
+                  className="px-4 sm:px-6 lg:p-6 hover:bg-slate-700/30 transition-all duration-200 flex items-center justify-between group"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
@@ -177,6 +180,7 @@ export default function StudentsList() {
           )}
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

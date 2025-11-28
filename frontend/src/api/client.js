@@ -54,6 +54,20 @@ export const studentAPI = {
   getDashboard: () => client.get('/student/dashboard'),
 };
 
+export const mcqAPI = {
+  // Mentor routes
+  getQuestions: (entryId) => client.get(`/mcq/entries/${entryId}/questions`),
+  createQuestion: (entryId, data) => client.post(`/mcq/entries/${entryId}/questions`, data),
+  updateQuestion: (questionId, data) => client.put(`/mcq/questions/${questionId}`, data),
+  deleteQuestion: (questionId) => client.delete(`/mcq/questions/${questionId}`),
+  getStudentAnswers: (entryId) => client.get(`/mcq/entries/${entryId}/student-answers`),
+  
+  // Student routes
+  getQuestionsForStudent: (entryId) => client.get(`/mcq/entries/${entryId}/questions/student`),
+  submitAnswers: (entryId, answers) => client.post(`/mcq/entries/${entryId}/answers`, answers),
+  getMyAnswers: (entryId) => client.get(`/mcq/entries/${entryId}/answers`),
+};
+
 // Generic API export for components that need the axios client directly
 export const api = client;
 

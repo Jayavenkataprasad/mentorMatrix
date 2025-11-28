@@ -60,7 +60,7 @@ export default function StudentActivity() {
         </button>
 
         {/* Student Info */}
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
+        <div className="bg-white rounded-lg shadow px-4 sm:px-6 lg:p-6 mb-8">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-3xl font-bold text-gray-800">Student Activity</h2>
@@ -96,7 +96,7 @@ export default function StudentActivity() {
         <div className="space-y-4">
           {entries.length > 0 ? (
             entries.map(entry => (
-              <div key={entry.id} className="bg-white rounded-lg shadow hover:shadow-lg transition-all p-6">
+              <div key={entry.id} className="bg-white rounded-lg shadow hover:shadow-lg transition-all px-4 sm:px-6 lg:p-6">
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex-1">
                     <h3 className="text-xl font-semibold text-gray-800">{entry.title}</h3>

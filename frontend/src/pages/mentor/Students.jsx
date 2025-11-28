@@ -41,9 +41,9 @@ export default function MentorStudents() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <Navbar />
-      <div className="max-w-6xl mx-auto p-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:p-6">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">My Students</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">My Students</h1>
           <p className="text-purple-200">Manage and monitor your students' progress</p>
         </div>
 

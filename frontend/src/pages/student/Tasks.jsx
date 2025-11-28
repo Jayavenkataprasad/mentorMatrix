@@ -73,12 +73,12 @@ export default function StudentTasks() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900">
         <Navbar />
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
-            <p className="text-purple-200 mt-4">Loading tasks...</p>
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            <p className="text-slate-500 mt-4">Loading tasks...</p>
           </div>
         </div>
       </div>
@@ -86,13 +86,13 @@ export default function StudentTasks() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900">
       <Navbar />
-      <div className="max-w-6xl mx-auto p-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:p-6">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
-            <BookOpen className="text-blue-400" />
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 flex items-center gap-3">
+            <BookOpen className="text-purple-400" />
             My Tasks
           </h1>
           <p className="text-purple-200">Track and complete your assigned learning tasks</p>
@@ -107,14 +107,14 @@ export default function StudentTasks() {
               placeholder="Search tasks..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
+              className="w-full pl-10 pr-4 py-3 bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm border border-white/20 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             />
           </div>
           <div className="flex gap-2">
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-purple-500"
+              className="px-4 py-3 bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm border border-white/20 rounded-xl text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             >
               <option value="all">All Tasks</option>
               <option value="pending">Pending</option>
@@ -122,7 +122,7 @@ export default function StudentTasks() {
             </select>
             <button
               onClick={() => navigate('/student/task-questions')}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl transition-colors flex items-center gap-2"
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-xl transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl"
             >
               <MessageCircle size={20} />
               Task Questions
@@ -132,29 +132,29 @@ export default function StudentTasks() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+          <div className="bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm border border-white/20 rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-200 text-sm mb-1">Total Tasks</p>
-                <p className="text-3xl font-bold text-white">{tasks.length}</p>
+                <p className="text-slate-500 text-sm mb-1">Total Tasks</p>
+                <p className="text-3xl font-bold text-slate-900">{tasks.length}</p>
               </div>
               <BookOpen className="text-blue-400" size={32} />
             </div>
           </div>
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+          <div className="bg-gradient-to-br from-sky-100/50 to-blue-100/30 border border-sky-200/50 rounded-xl p-6 backdrop-blur-sm">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-200 text-sm mb-1">Pending</p>
-                <p className="text-3xl font-bold text-yellow-400">{pendingTasks.length}</p>
+                <p className="text-slate-500 text-sm mb-1">Pending</p>
+                <p className="text-3xl font-bold text-yellow-500">{pendingTasks.length}</p>
               </div>
               <Circle className="text-yellow-400" size={32} />
             </div>
           </div>
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+          <div className="bg-gradient-to-br from-sky-100/50 to-blue-100/30 border border-sky-200/50 rounded-xl p-6 backdrop-blur-sm">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-200 text-sm mb-1">Completed</p>
-                <p className="text-3xl font-bold text-green-400">{completedTasks.length}</p>
+                <p className="text-slate-500 text-sm mb-1">Completed</p>
+                <p className="text-3xl font-bold text-green-500">{completedTasks.length}</p>
               </div>
               <CheckCircle2 className="text-green-400" size={32} />
             </div>
@@ -164,12 +164,12 @@ export default function StudentTasks() {
         {/* Tasks List */}
         <div className="space-y-4">
           {!tasks || tasks.length === 0 || filteredTasks.length === 0 ? (
-            <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-12 text-center">
-              <BookOpen className="mx-auto text-gray-500 mb-4" size={48} />
-              <p className="text-gray-400 text-lg">
+            <div className="bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm border border-white/20 rounded-xl p-12 text-center shadow-sm">
+              <BookOpen className="mx-auto text-slate-400 mb-4" size={48} />
+              <p className="text-slate-500 text-lg">
                 {searchTerm || filterStatus !== 'all' ? 'No tasks found matching your filters.' : 'No tasks assigned yet'}
               </p>
-              <p className="text-gray-500 text-sm mt-2">
+              <p className="text-slate-400 text-sm mt-2">
                 {searchTerm || filterStatus !== 'all' ? 'Try adjusting your search or filters.' : 'Your mentor will assign tasks to help you learn'}
               </p>
             </div>
@@ -177,7 +177,7 @@ export default function StudentTasks() {
             filteredTasks.map(task => (
               <div
                 key={task.id}
-                className={`bg-slate-800/50 border border-slate-700 rounded-xl p-6 hover:bg-slate-700/30 transition-all ${
+                className={`bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] ${
                   task.completed ? 'opacity-75' : ''
                 }`}
               >
@@ -193,15 +193,15 @@ export default function StudentTasks() {
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <h3 className={`text-xl font-semibold mb-2 ${task.completed ? 'text-gray-400 line-through' : 'text-white'}`}>
+                        <h3 className={`text-xl font-semibold mb-2 ${task.completed ? 'text-slate-400 line-through' : 'text-slate-900'}`}>
                           {task.title || 'Untitled Task'}
                         </h3>
                         {task.description && (
-                          <p className={`text-sm mb-3 ${task.completed ? 'text-gray-500 line-through' : 'text-gray-300'}`}>
+                          <p className={`text-sm mb-3 ${task.completed ? 'text-slate-400 line-through' : 'text-slate-600'}`}>
                             {task.description}
                           </p>
                         )}
-                        <div className="flex items-center gap-4 text-sm text-gray-400">
+                        <div className="flex items-center gap-4 text-sm text-slate-500">
                           <span className="flex items-center gap-1">
                             <User size={14} />
                             Mentor ID: {task.mentorId}
@@ -222,22 +222,22 @@ export default function StudentTasks() {
                       </div>
                       <div className="ml-4">
                         {task.completed ? (
-                          <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-600/20 text-green-300 border border-green-500">
+                          <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200">
                             Completed
                           </span>
                         ) : (
-                          <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-600/20 text-yellow-300 border border-yellow-500">
+                          <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 border border-yellow-200">
                             Pending
                           </span>
                         )}
                       </div>
                     </div>
                     {task.completed && (
-                      <div className="mt-4 pt-4 border-t border-slate-700">
-                        <p className="text-sm text-green-400 mb-2">✅ Task completed! Your mentor may add questions to assess your understanding.</p>
+                      <div className="mt-4 pt-4 border-t border-white/20">
+                        <p className="text-sm text-green-600 mb-2">✅ Task completed! Your mentor may add questions to assess your understanding.</p>
                         <button
                           onClick={() => navigate('/student/task-questions')}
-                          className="text-sm bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 px-4 py-2 rounded-lg transition-colors border border-purple-500"
+                          className="text-sm bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-blue-700 px-4 py-2 rounded-lg transition-all duration-300 border border-blue-200"
                         >
                           Check for Questions
                         </button>

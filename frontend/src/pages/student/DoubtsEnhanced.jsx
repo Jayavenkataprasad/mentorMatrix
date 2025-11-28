@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, MessageCircle, CheckCircle, Clock, Trash2, X, AlertCircle, Zap, Mic, Play, Pause, Download } from 'lucide-react';
+import Navbar from '../../components/Navbar';
 import { api } from '../../api/client.js';
 import { SUBJECTS, TECH_STACKS, PRIORITY_LEVELS, DOUBT_TYPES, getAllSubjects } from '../../constants/subjects.js';
 
@@ -144,19 +145,20 @@ export default function DoubtsEnhanced() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900">
+      <Navbar />
+      <div className="max-w-7xl mx-auto p-6">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-4xl font-bold text-white mb-2">
-              💡 My Doubts & Questions
+              
             </h1>
             <p className="text-purple-200">Get clarity on concepts and projects from your mentor</p>
           </div>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl hover:shadow-2xl transform hover:scale-105 transition-all font-semibold"
+            className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all font-semibold"
           >
             <Plus size={20} />
             Ask a Doubt
@@ -165,12 +167,12 @@ export default function DoubtsEnhanced() {
 
         {/* Create Doubt Form */}
         {showForm && (
-          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-2xl shadow-2xl p-8 mb-8 border border-purple-500/30">
+          <div className="bg-gradient-to-br from-purple-800/50 to-indigo-800/50 backdrop-blur-xl border border-purple-600/50 rounded-2xl shadow-lg p-8 mb-8">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-white">Ask Your Doubt</h2>
               <button
                 onClick={() => setShowForm(false)}
-                className="text-gray-400 hover:text-white p-2 hover:bg-slate-600 rounded-lg transition-colors"
+                className="text-purple-300 hover:text-white p-2 hover:bg-purple-700/50 rounded-lg transition-colors"
               >
                 <X size={24} />
               </button>
@@ -190,8 +192,8 @@ export default function DoubtsEnhanced() {
                       onClick={() => setFormData({...formData, doubtType: type.value})}
                       className={`p-4 rounded-xl border-2 transition-all ${
                         formData.doubtType === type.value
-                          ? 'bg-purple-600 border-purple-400 text-white'
-                          : 'bg-slate-700 border-slate-600 text-gray-300 hover:border-purple-400'
+                          ? 'bg-indigo-50 border-indigo-400 text-indigo-700'
+                          : 'bg-slate-50 border-slate-200 text-purple-200 hover:border-indigo-400'
                       }`}
                     >
                       <span className="text-2xl mr-2">{type.icon}</span>
@@ -209,7 +211,7 @@ export default function DoubtsEnhanced() {
                 <select
                   value={formData.subject}
                   onChange={(e) => setFormData({...formData, subject: e.target.value})}
-                  className="w-full px-4 py-3 bg-slate-700 border-2 border-slate-600 rounded-xl text-white focus:outline-none focus:border-purple-500 transition-colors"
+                  className="w-full px-4 py-3 bg-purple-900/50 border-2 border-purple-600/50 rounded-xl text-white focus:outline-none focus:border-purple-400 transition-colors"
                   required
                 >
                   <option value="">Choose a subject...</option>
@@ -233,7 +235,7 @@ export default function DoubtsEnhanced() {
                 <select
                   value={formData.techStack}
                   onChange={(e) => setFormData({...formData, techStack: e.target.value})}
-                  className="w-full px-4 py-3 bg-slate-700 border-2 border-slate-600 rounded-xl text-white focus:outline-none focus:border-purple-500 transition-colors"
+                  className="w-full px-4 py-3 bg-slate-700/50 border-2 border-slate-600 rounded-xl text-white focus:outline-none focus:border-purple-500 transition-colors"
                 >
                   <option value="">Select tech stack (optional)</option>
                   {TECH_STACKS.map(stack => (
@@ -255,7 +257,7 @@ export default function DoubtsEnhanced() {
                     placeholder="e.g., E-commerce Platform, Chat Application"
                     value={formData.projectName}
                     onChange={(e) => setFormData({...formData, projectName: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-700 border-2 border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-3 bg-purple-900/50 border-2 border-purple-600/50 rounded-xl text-white placeholder-purple-300 focus:outline-none focus:border-purple-400 transition-colors"
                   />
                 </div>
               )}
@@ -270,7 +272,7 @@ export default function DoubtsEnhanced() {
                   placeholder="What's your question?"
                   value={formData.question}
                   onChange={(e) => setFormData({...formData, question: e.target.value})}
-                  className="w-full px-4 py-3 bg-slate-700 border-2 border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
+                  className="w-full px-4 py-3 bg-purple-900/50 border-2 border-purple-600/50 rounded-xl text-white placeholder-purple-300 focus:outline-none focus:border-purple-400 transition-colors resize-none"
                   required
                 />
               </div>
@@ -284,7 +286,7 @@ export default function DoubtsEnhanced() {
                   placeholder="Provide more context about your doubt..."
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  className="w-full px-4 py-3 bg-slate-700 border-2 border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
+                  className="w-full px-4 py-3 bg-purple-900/50 border-2 border-purple-600/50 rounded-xl text-white placeholder-purple-300 focus:outline-none focus:border-purple-400 transition-colors resize-none"
                   rows="4"
                 />
               </div>
@@ -303,7 +305,7 @@ export default function DoubtsEnhanced() {
                       className={`p-3 rounded-xl border-2 transition-all font-semibold ${
                         formData.priority === level.value
                           ? `${level.color} border-current`
-                          : 'bg-slate-700 border-slate-600 text-gray-300 hover:border-purple-400'
+                          : 'bg-slate-50 border-slate-200 text-purple-200 hover:border-indigo-400'
                       }`}
                     >
                       {level.label}
@@ -316,14 +318,14 @@ export default function DoubtsEnhanced() {
               <div className="flex gap-2 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl hover:shadow-lg font-semibold transition-all"
+                  className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl shadow-md hover:shadow-lg font-semibold transition-all"
                 >
                   Submit Doubt
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="flex-1 bg-slate-700 text-gray-300 py-3 rounded-xl hover:bg-slate-600 font-semibold transition-colors"
+                  className="flex-1 bg-slate-100 text-slate-800 py-3 rounded-xl hover:bg-slate-200 font-semibold transition-colors"
                 >
                   Cancel
                 </button>
@@ -342,8 +344,8 @@ export default function DoubtsEnhanced() {
                 onClick={() => setFilterStatus(status)}
                 className={`px-4 py-2 rounded-full font-semibold transition-all ${
                   filterStatus === status
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                    : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
+                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
+                    : 'bg-purple-800/50 text-purple-200 border border-purple-600/50 hover:bg-purple-700/50'
                 }`}
               >
                 {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -358,8 +360,8 @@ export default function DoubtsEnhanced() {
                 onClick={() => setFilterType(type)}
                 className={`px-4 py-2 rounded-full font-semibold transition-all ${
                   filterType === type
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                    : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
+                    ? 'bg-indigo-600 text-white shadow-md'
+                    : 'bg-white text-purple-200 border border-slate-200 hover:bg-slate-50'
                 }`}
               >
                 {type === 'all' ? 'All' : type === 'concept' ? '📚 Concept' : '🚀 Project'}
@@ -371,13 +373,13 @@ export default function DoubtsEnhanced() {
         {/* Doubts Grid */}
         {loading ? (
           <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
-            <p className="text-gray-300 mt-4">Loading your doubts...</p>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <p className="text-slate-500 mt-4">Loading your doubts...</p>
           </div>
         ) : doubts.length === 0 ? (
-          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-2xl shadow-lg p-12 text-center border border-purple-500/30">
-            <MessageCircle size={48} className="mx-auto text-purple-400 mb-4" />
-            <p className="text-gray-300 text-lg">No doubts yet. Ask your first doubt!</p>
+          <div className="bg-white rounded-2xl shadow-md p-12 text-center border border-slate-200">
+            <MessageCircle size={48} className="mx-auto text-slate-400 mb-4" />
+            <p className="text-slate-500 text-lg">No doubts yet. Ask your first doubt!</p>
           </div>
         ) : (
           <div className="grid gap-4">
@@ -385,7 +387,7 @@ export default function DoubtsEnhanced() {
               <div
                 key={doubt.id}
                 onClick={() => setSelectedDoubt(doubt)}
-                className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl shadow-lg hover:shadow-2xl transition-all border border-purple-500/30 p-6 cursor-pointer transform hover:scale-102"
+                className="bg-gradient-to-br from-purple-800/50 to-indigo-800/50 backdrop-blur-xl border border-purple-600/50 rounded-xl shadow-md hover:shadow-lg transition-all p-6 cursor-pointer transform hover:-translate-y-1"
               >
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
@@ -397,25 +399,25 @@ export default function DoubtsEnhanced() {
                         {doubt.status.charAt(0).toUpperCase() + doubt.status.slice(1)}
                       </span>
                     </div>
-                    <p className="text-gray-300 mb-3">{doubt.description}</p>
+                    <p className="text-purple-200 mb-3">{doubt.description}</p>
                     <div className="flex gap-3 flex-wrap text-sm">
-                      <span className="bg-purple-600/40 text-purple-200 px-3 py-1 rounded-full font-semibold">
+                      <span className="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-semibold border border-indigo-100">
                         📖 {doubt.subject}
                       </span>
                       {doubt.techStack && (
-                        <span className="bg-blue-600/40 text-blue-200 px-3 py-1 rounded-full font-semibold">
+                        <span className="bg-sky-50 text-sky-700 px-3 py-1 rounded-full font-semibold border border-sky-100">
                           ⚙️ {doubt.techStack}
                         </span>
                       )}
                       {doubt.projectName && (
-                        <span className="bg-green-600/40 text-green-200 px-3 py-1 rounded-full font-semibold">
+                        <span className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full font-semibold border border-emerald-100">
                           🎯 {doubt.projectName}
                         </span>
                       )}
                       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getPriorityBadge(doubt.priority)}`}>
                         {doubt.priority.toUpperCase()}
                       </span>
-                      <span className="text-gray-400 text-xs self-center">
+                      <span className="text-slate-400 text-xs self-center">
                         {new Date(doubt.createdAt).toLocaleDateString()}
                       </span>
                     </div>
@@ -425,7 +427,7 @@ export default function DoubtsEnhanced() {
                       e.stopPropagation();
                       handleDeleteDoubt(doubt.id);
                     }}
-                    className="text-red-400 hover:text-red-300 p-2 hover:bg-red-500/20 rounded-lg transition-colors"
+                    className="text-red-500 hover:text-red-600 p-2 hover:bg-red-50 rounded-lg transition-colors"
                   >
                     <Trash2 size={20} />
                   </button>
@@ -438,35 +440,35 @@ export default function DoubtsEnhanced() {
 
       {/* Detail Modal */}
       {selectedDoubt && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-2xl shadow-2xl max-w-2xl w-full max-h-96 overflow-y-auto border border-purple-500/30">
-            <div className="sticky top-0 bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 flex justify-between items-center">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-96 overflow-y-auto border border-slate-200">
+            <div className="sticky top-0 bg-gradient-to-r from-indigo-500 to-sky-500 text-white p-6 flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{getTypeIcon(selectedDoubt.doubtType)}</span>
                 <h2 className="text-2xl font-bold">{selectedDoubt.question}</h2>
               </div>
               <button
                 onClick={() => setSelectedDoubt(null)}
-                className="text-white hover:bg-white hover:bg-opacity-20 p-2 rounded-lg transition-colors"
+                className="text-white hover:bg-white/20 p-2 rounded-lg transition-colors"
               >
                 <X size={24} />
               </button>
             </div>
 
             <div className="p-6 space-y-4">
-              <div className="bg-slate-700/50 p-4 rounded-xl border border-purple-500/20">
-                <p className="text-gray-300 mb-3">{selectedDoubt.description}</p>
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <p className="text-purple-200 mb-3">{selectedDoubt.description}</p>
                 <div className="flex gap-2 flex-wrap">
-                  <span className="bg-purple-600/40 text-purple-200 px-3 py-1 rounded-full text-sm font-semibold">
+                  <span className="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-sm font-semibold border border-indigo-100">
                     📖 {selectedDoubt.subject}
                   </span>
                   {selectedDoubt.techStack && (
-                    <span className="bg-blue-600/40 text-blue-200 px-3 py-1 rounded-full text-sm font-semibold">
+                    <span className="bg-sky-50 text-sky-700 px-3 py-1 rounded-full text-sm font-semibold border border-sky-100">
                       ⚙️ {selectedDoubt.techStack}
                     </span>
                   )}
                   {selectedDoubt.projectName && (
-                    <span className="bg-green-600/40 text-green-200 px-3 py-1 rounded-full text-sm font-semibold">
+                    <span className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-sm font-semibold border border-emerald-100">
                       🎯 {selectedDoubt.projectName}
                     </span>
                   )}
@@ -478,18 +480,18 @@ export default function DoubtsEnhanced() {
 
               {/* Answers */}
               {selectedDoubt.answers && selectedDoubt.answers.length > 0 && (
-                <div className="border-t border-purple-500/30 pt-4">
+                <div className="border-t border-slate-200 pt-4">
                   <h3 className="font-bold text-white mb-3">Mentor's Answers</h3>
                   <div className="space-y-3">
                     {selectedDoubt.answers.map(answer => (
-                      <div key={answer.id} className="bg-green-600/20 border-l-4 border-green-500 p-4 rounded">
-                        <p className="font-semibold text-green-300 mb-2">{answer.mentorName}</p>
-                        {answer.answer && <p className="text-gray-200 mb-3">{answer.answer}</p>}
+                      <div key={answer.id} className="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded">
+                        <p className="font-semibold text-indigo-700 mb-2">{answer.mentorName}</p>
+                        {answer.answer && <p className="text-purple-200 mb-3">{answer.answer}</p>}
                         
                         {/* Voice Note */}
                         {answer.voiceNoteUrl && (
                           <div className="mb-3">
-                            <p className="text-sm text-gray-400 mb-2 flex items-center gap-1">
+                            <p className="text-sm text-slate-500 mb-2 flex items-center gap-1">
                               <Mic size={14} />
                               Voice Note
                             </p>
@@ -507,10 +509,10 @@ export default function DoubtsEnhanced() {
                             <div className="space-y-2">
                               {JSON.parse(answer.attachments).map((file, index) => (
                                 <div key={index} className="flex items-center justify-between bg-slate-700/50 p-2 rounded">
-                                  <span className="text-sm text-gray-300 truncate">{file.name}</span>
+                                  <span className="text-sm text-purple-200 truncate">{file.name}</span>
                                   <button
                                     onClick={() => downloadFile(file)}
-                                    className="text-blue-400 hover:text-blue-300"
+                                    className="text-indigo-600 hover:text-indigo-500"
                                   >
                                     <Download size={16} />
                                   </button>
@@ -521,7 +523,7 @@ export default function DoubtsEnhanced() {
                         )}
 
                         {answer.resources && (
-                          <p className="text-sm text-gray-400">📚 Resources: {answer.resources}</p>
+                          <p className="text-sm text-slate-500">📚 Resources: {answer.resources}</p>
                         )}
                       </div>
                     ))}
@@ -530,22 +532,22 @@ export default function DoubtsEnhanced() {
               )}
 
               {/* Timeline Strip */}
-              <div className="border-t border-purple-500/30 pt-4">
+              <div className="border-t border-slate-200 pt-4">
                 <h3 className="font-bold text-white mb-3">Activity Timeline</h3>
                 <div className="relative">
                   {/* Timeline line */}
-                  <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-purple-600/30"></div>
+                  <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-indigo-500/20"></div>
                   <div className="space-y-4">
                     {/* Created */}
                     <div className="flex items-start gap-3">
-                      <div className="relative z-10 w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                      <div className="relative z-10 w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center shadow-lg animate-pulse">
                         <MessageCircle size={16} className="text-white" />
                       </div>
                       <div className="flex-1">
-                        <div className="bg-purple-600/20 border border-purple-500/30 rounded-xl p-3 transition-all duration-300 hover:bg-purple-600/30">
-                          <p className="font-semibold text-purple-200">Doubt Created</p>
-                          <p className="text-sm text-gray-300 mt-1">You asked: {selectedDoubt.question}</p>
-                          <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
+                        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-3 transition-all duration-300 hover:bg-indigo-100">
+                          <p className="font-semibold text-indigo-700">Doubt Created</p>
+                          <p className="text-sm text-purple-200 mt-1">You asked: {selectedDoubt.question}</p>
+                          <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
                             <Clock size={12} />
                             {formatTimestamp(selectedDoubt.createdAt)}
                           </p>
@@ -556,17 +558,17 @@ export default function DoubtsEnhanced() {
                     {/* Answered */}
                     {selectedDoubt.answers && selectedDoubt.answers.length > 0 && selectedDoubt.answers.map((answer, idx) => (
                       <div key={answer.id} className="flex items-start gap-3">
-                        <div className="relative z-10 w-8 h-8 bg-green-600 rounded-full flex items-center justify-center shadow-lg">
+                        <div className="relative z-10 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg">
                           <CheckCircle size={16} className="text-white" />
                         </div>
                         <div className="flex-1">
-                          <div className="bg-green-600/20 border border-green-500/30 rounded-xl p-3 transition-all duration-300 hover:bg-green-600/30">
-                            <p className="font-semibold text-green-200">Answered</p>
-                            <p className="text-sm text-gray-300 mt-1">Mentor responded</p>
+                          <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-3 transition-all duration-300 hover:bg-emerald-100">
+                            <p className="font-semibold text-emerald-700">Answered</p>
+                            <p className="text-sm text-purple-200 mt-1">Mentor responded</p>
                             {answer.resources && (
-                              <p className="text-xs text-gray-400 mt-2">📚 Resources: {answer.resources}</p>
+                              <p className="text-xs text-slate-500 mt-2">📚 Resources: {answer.resources}</p>
                             )}
-                            <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
+                            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
                               <Clock size={12} />
                               {formatTimestamp(answer.createdAt)}
                             </p>
@@ -578,14 +580,14 @@ export default function DoubtsEnhanced() {
                     {/* Resolved */}
                     {selectedDoubt.status === 'resolved' && (
                       <div className="flex items-start gap-3">
-                        <div className="relative z-10 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                        <div className="relative z-10 w-8 h-8 bg-sky-500 rounded-full flex items-center justify-center shadow-lg">
                           <CheckCircle size={16} className="text-white" />
                         </div>
                         <div className="flex-1">
-                          <div className="bg-blue-600/20 border border-blue-500/30 rounded-xl p-3 transition-all duration-300 hover:bg-blue-600/30">
-                            <p className="font-semibold text-blue-200">Resolved</p>
-                            <p className="text-sm text-gray-300 mt-1">Doubt marked as resolved</p>
-                            <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
+                          <div className="bg-sky-50 border border-sky-100 rounded-xl p-3 transition-all duration-300 hover:bg-sky-100">
+                            <p className="font-semibold text-sky-700">Resolved</p>
+                            <p className="text-sm text-purple-200 mt-1">Doubt marked as resolved</p>
+                            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
                               <Clock size={12} />
                               {formatTimestamp(selectedDoubt.updatedAt)}
                             </p>
@@ -597,13 +599,13 @@ export default function DoubtsEnhanced() {
                     {/* Pending next step */}
                     {selectedDoubt.status === 'open' && (
                       <div className="flex items-start gap-3 opacity-60">
-                        <div className="relative z-10 w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
+                        <div className="relative z-10 w-8 h-8 bg-slate-400 rounded-full flex items-center justify-center">
                           <Clock size={16} className="text-white" />
                         </div>
                         <div className="flex-1">
-                          <div className="bg-gray-600/20 border border-gray-500/30 rounded-xl p-3">
-                            <p className="font-semibold text-gray-300">Awaiting Answer</p>
-                            <p className="text-sm text-gray-400 mt-1">Mentor will respond soon</p>
+                          <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                            <p className="font-semibold text-purple-200">Awaiting Answer</p>
+                            <p className="text-sm text-slate-500 mt-1">Mentor will respond soon</p>
                           </div>
                         </div>
                       </div>
@@ -613,14 +615,14 @@ export default function DoubtsEnhanced() {
               </div>
 
               {selectedDoubt.status === 'open' && (
-                <p className="text-center text-gray-400 py-4">⏳ Waiting for mentor's response...</p>
+                <p className="text-center text-slate-500 py-4">⏳ Waiting for mentor's response...</p>
               )}
 
               {selectedDoubt.status === 'answered' && (
                 <div className="flex gap-2 pt-4">
                   <button
                     onClick={handleNeedsMoreExplanation}
-                    className="flex-1 bg-gradient-to-r from-orange-600 to-yellow-600 text-white py-2 rounded-xl hover:shadow-lg font-semibold"
+                    className="flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white py-2 rounded-xl hover:shadow-lg font-semibold"
                   >
                     Needs More Explanation
                   </button>
@@ -628,7 +630,7 @@ export default function DoubtsEnhanced() {
               )}
 
               {selectedDoubt.status === 'needs_more_explanation' && (
-                <p className="text-center text-orange-400 py-4">⏳ Mentor will provide more explanation...</p>
+                <p className="text-center text-amber-500 py-4">⏳ Mentor will provide more explanation...</p>
               )}
             </div>
           </div>

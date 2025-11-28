@@ -1,18 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
-import { mentorAPI } from '../../api/client';
+import { mentorAPI, mcqAPI, entriesAPI } from '../../api/client';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Users, BookOpen, CheckCircle, AlertCircle, GraduationCap, MessageCircle, TrendingUp, Calendar, Clock, Award } from 'lucide-react';
+import { Users, BookOpen, CheckCircle, AlertCircle, GraduationCap, MessageCircle, TrendingUp, Calendar, Clock, Award, HelpCircle, Brain } from 'lucide-react';
 
 export default function MentorDashboard() {
   const [analytics, setAnalytics] = useState(null);
+  const [quizAnalytics, setQuizAnalytics] = useState(null);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchAnalytics();
-  }, []);
+    fetchStudents();
+    fetchQuizAnalytics();
+    
+    // Listen for quiz submissions from students
+    const handleQuizSubmission = (event) => {
+      console.log('MentorDashboard: Detected quiz submission, refreshing analytics...');
+      fetchQuizAnalytics();
+      fetchAnalytics(); // Also refresh general analytics
+    };
+
+    window.addEventListener('quizSubmitted', handleQuizSubmission);
+    
+    return () => {
+      window.removeEventListener('quizSubmitted', handleQuizSubmission);
+    };
+  }, [selectedStudent]); // Re-fetch when student selection changes
 
   const fetchAnalytics = async () => {
     try {
@@ -20,6 +38,75 @@ export default function MentorDashboard() {
       setAnalytics(response.data);
     } catch (error) {
       console.error('Failed to fetch analytics:', error);
+    }
+  };
+
+  const fetchStudents = async () => {
+    try {
+      const response = await mentorAPI.getStudents();
+      setStudents(response.data);
+    } catch (error) {
+      console.error('Failed to fetch students:', error);
+    }
+  };
+
+  const fetchQuizAnalytics = async () => {
+    try {
+      // Get all entries for this mentor
+      const entriesResponse = await entriesAPI.getAll();
+      const entries = entriesResponse.data;
+      
+      // Filter entries by selected student if one is selected
+      const filteredEntries = selectedStudent 
+        ? entries.filter(entry => entry.studentId === selectedStudent.id)
+        : entries;
+      
+      let totalQuizzes = 0;
+      let completedQuizzes = 0;
+      let averageScore = 0;
+      let totalScore = 0;
+      let maxPossibleScore = 0;
+
+      // Fetch quiz results for each filtered entry
+      for (const entry of filteredEntries) {
+        try {
+          const quizResults = await mcqAPI.getStudentAnswers(entry.id);
+          if (quizResults.data.length > 0) {
+            totalQuizzes++;
+            completedQuizzes++;
+            
+            // Calculate scores for this entry
+            quizResults.data.forEach(result => {
+              totalScore += result.points || 0;
+              maxPossibleScore += result.totalPoints || 1;
+            });
+          } else {
+            // Check if questions exist for this entry
+            try {
+              const questions = await mcqAPI.getQuestions(entry.id);
+              if (questions.data.length > 0) {
+                totalQuizzes++;
+              }
+            } catch (error) {
+              // No questions for this entry
+            }
+          }
+        } catch (error) {
+          // No quiz results for this entry
+        }
+      }
+
+      averageScore = maxPossibleScore > 0 ? Math.round((totalScore / maxPossibleScore) * 100) : 0;
+
+      setQuizAnalytics({
+        totalQuizzes,
+        completedQuizzes,
+        averageScore,
+        pendingQuizzes: totalQuizzes - completedQuizzes,
+        studentName: selectedStudent ? selectedStudent.name : 'All Students'
+      });
+    } catch (error) {
+      console.error('Failed to fetch quiz analytics:', error);
     } finally {
       setLoading(false);
     }
@@ -45,10 +132,10 @@ export default function MentorDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <Navbar />
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:p-6">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Mentor Dashboard</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">Mentor Dashboard</h1>
           <p className="text-purple-200">Track your students' progress and engagement</p>
         </div>
 
@@ -91,8 +178,83 @@ export default function MentorDashboard() {
           </div>
         </div>
 
+        {/* Student Selector for Quiz Analytics */}
+        <div className="bg-gradient-to-br from-purple-800/50 to-indigo-800/50 backdrop-blur-xl border border-purple-600/50 rounded-xl p-6 mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-semibold text-white flex items-center gap-2">
+              <Brain className="text-purple-400" size={20} />
+              Quiz Analytics
+            </h3>
+            <select
+              value={selectedStudent ? selectedStudent.id : ''}
+              onChange={(e) => {
+                const student = students.find(s => s.id === e.target.value);
+                setSelectedStudent(student || null);
+              }}
+              className="bg-slate-700/50 border border-slate-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            >
+              <option value="">All Students</option>
+              {students.map(student => (
+                <option key={student.id} value={student.id}>
+                  {student.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          {selectedStudent && (
+            <p className="text-purple-200 text-sm">
+              Showing quiz results for <span className="font-semibold text-white">{selectedStudent.name}</span>
+            </p>
+          )}
+        </div>
+
+        {/* Quiz Analytics Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="bg-gradient-to-br from-purple-800/50 to-indigo-800/50 backdrop-blur-xl border border-purple-600/50 rounded-xl p-6 hover:bg-purple-700/30 transition-all">
+            <div className="flex items-center justify-between mb-4">
+              <Brain className="text-purple-400" size={24} />
+              <span className="text-xs text-purple-300 font-medium">Total</span>
+            </div>
+            <p className="text-3xl font-bold text-white">{quizAnalytics?.totalQuizzes || 0}</p>
+            <p className="text-sm text-purple-200 mt-1">
+            {selectedStudent ? `${selectedStudent.name}'s Quizzes` : 'Quiz Created'}
+          </p>
+          </div>
+
+          <div className="bg-gradient-to-br from-green-800/50 to-emerald-800/50 backdrop-blur-xl border border-green-600/50 rounded-xl p-6 hover:bg-green-700/30 transition-all">
+            <div className="flex items-center justify-between mb-4">
+              <CheckCircle className="text-green-400" size={24} />
+              <span className="text-xs text-purple-300 font-medium">Completed</span>
+            </div>
+            <p className="text-3xl font-bold text-white">{quizAnalytics?.completedQuizzes || 0}</p>
+            <p className="text-sm text-purple-200 mt-1">Quizzes Taken</p>
+          </div>
+
+          <div className="bg-gradient-to-br from-yellow-800/50 to-orange-800/50 backdrop-blur-xl border border-yellow-600/50 rounded-xl p-6 hover:bg-yellow-700/30 transition-all">
+            <div className="flex items-center justify-between mb-4">
+              <Award className="text-yellow-400" size={24} />
+              <span className="text-xs text-purple-300 font-medium">Average</span>
+            </div>
+            <p className="text-3xl font-bold text-white">{quizAnalytics?.averageScore || 0}%</p>
+            <p className="text-sm text-purple-200 mt-1">
+              {selectedStudent ? `${selectedStudent.name}'s Score` : 'Average Score'}
+            </p>
+          </div>
+
+          <div className="bg-gradient-to-br from-red-800/50 to-pink-800/50 backdrop-blur-xl border border-red-600/50 rounded-xl p-6 hover:bg-red-700/30 transition-all">
+            <div className="flex items-center justify-between mb-4">
+              <Clock className="text-red-400" size={24} />
+              <span className="text-xs text-purple-300 font-medium">Pending</span>
+            </div>
+            <p className="text-3xl font-bold text-white">{quizAnalytics?.pendingQuizzes || 0}</p>
+            <p className="text-sm text-purple-200 mt-1">
+              {selectedStudent ? `Awaiting ${selectedStudent.name}` : 'Awaiting Results'}
+            </p>
+          </div>
+        </div>
+
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <button
             onClick={() => navigate('/mentor/students-list')}
             className="bg-purple-600 hover:bg-purple-700 text-white rounded-xl p-6 transition-colors group"
@@ -100,6 +262,15 @@ export default function MentorDashboard() {
             <Users className="mb-3 group-hover:scale-110 transition-transform" size={24} />
             <p className="font-semibold">View Students</p>
             <p className="text-sm opacity-80">Manage your students</p>
+          </button>
+
+          <button
+            onClick={() => navigate('/mentor/entries')}
+            className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl p-6 transition-colors group"
+          >
+            <HelpCircle className="mb-3 group-hover:scale-110 transition-transform" size={24} />
+            <p className="font-semibold">MCQ Questions</p>
+            <p className="text-sm opacity-80">Create assessments</p>
           </button>
 
           <button
@@ -118,6 +289,15 @@ export default function MentorDashboard() {
             <CheckCircle className="mb-3 group-hover:scale-110 transition-transform" size={24} />
             <p className="font-semibold">Completed Tasks</p>
             <p className="text-sm opacity-80">Review progress</p>
+          </button>
+
+          <button
+            onClick={() => navigate('/mentor/mcq')}
+            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl p-6 transition-colors group"
+          >
+            <Brain className="mb-3 group-hover:scale-110 transition-transform" size={24} />
+            <p className="font-semibold">Quiz Results</p>
+            <p className="text-sm opacity-80">View quiz analytics</p>
           </button>
         </div>
 
@@ -232,6 +412,37 @@ export default function MentorDashboard() {
                 <p className="text-gray-400">No recent entries</p>
               </div>
             )}
+          </div>
+
+          {/* Entries Needing Questions */}
+          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-white">Assessment Questions</h2>
+              <HelpCircle className="text-gray-400" size={20} />
+            </div>
+            <div className="space-y-3">
+              <div className="bg-purple-600/20 border border-purple-500 p-3 rounded-lg">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-white font-medium">Create MCQ Questions</p>
+                    <p className="text-sm text-purple-200">Test student understanding with interactive questions</p>
+                  </div>
+                  <button
+                    onClick={() => navigate('/mentor/entries')}
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-1"
+                  >
+                    <HelpCircle size={14} />
+                    Manage
+                  </button>
+                </div>
+              </div>
+              <div className="bg-blue-600/20 border border-blue-500 p-3 rounded-lg">
+                <div className="flex items-center gap-2 text-blue-300">
+                  <Calendar size={16} />
+                  <p className="text-sm">Set deadlines for better assessment control</p>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Recent Doubts */}

@@ -92,7 +92,7 @@ export default function TaskAssignment() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="bg-slate-800/50 border border-slate-700 rounded-xl shadow-xl p-6 space-y-6 backdrop-blur-sm">
+        <form onSubmit={handleSubmit} className="bg-slate-800/50 border border-slate-700 rounded-xl shadow-xl px-4 sm:px-6 lg:p-6 space-y-6 backdrop-blur-sm">
           <div>
             <label className="block text-sm font-medium text-purple-200 mb-2">Student *</label>
             <p className="text-xs text-gray-400 mb-2">

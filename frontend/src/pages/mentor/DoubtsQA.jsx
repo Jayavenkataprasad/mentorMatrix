@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MessageCircle, CheckCircle, AlertCircle, Send, X, Filter, Eye } from 'lucide-react';
 import { api } from '../../api/client.js';
+import Navbar from '../../components/Navbar';
 
 export default function DoubtsQA() {
   const [doubts, setDoubts] = useState([]);
@@ -98,11 +99,13 @@ export default function DoubtsQA() {
     : 'No task questions yet';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-6">
-      <div className="max-w-7xl mx-auto">
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900 px-4 sm:px-6 lg:p-6">
+        <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Doubts & Questions
           </h1>
           <p className="text-gray-600 mt-2">Review and answer student doubts and task-related questions</p>
@@ -178,7 +181,7 @@ export default function DoubtsQA() {
             <p className="text-gray-600 text-lg">{emptyMessage}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gapx-4 sm:px-6 lg:p-6">
             {/* List */}
             <div className="lg:col-span-1">
               <div className="space-y-3 max-h-96 overflow-y-auto">
@@ -215,7 +218,7 @@ export default function DoubtsQA() {
               <div className="lg:col-span-2">
                 <div className="bg-white rounded-xl shadow-lg overflow-hidden">
                   {/* Header */}
-                  <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+                  <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 sm:px-6 lg:p-6">
                     <div className="flex justify-between items-start">
                       <div>
                         <h2 className="text-2xl font-bold">{selectedItem.question}</h2>
@@ -233,7 +236,7 @@ export default function DoubtsQA() {
                   </div>
 
                   {/* Content */}
-                  <div className="p-6 space-y-4 max-h-96 overflow-y-auto">
+                  <div className="px-4 sm:px-6 lg:p-6 space-y-4 max-h-96 overflow-y-auto">
                     {/* Details */}
                     <div className="bg-gray-50 p-4 rounded-lg">
                       {activeTab === 'doubts' && (
@@ -330,6 +333,7 @@ export default function DoubtsQA() {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 }

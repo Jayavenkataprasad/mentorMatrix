@@ -45,6 +45,7 @@ export function initializeDatabase() {
             tags TEXT,
             resources TEXT,
             status TEXT DEFAULT 'pending' CHECK(status IN ('pending', 'reviewed', 'needs_work', 'approved')),
+            deadline DATETIME,
             createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
             updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (studentId) REFERENCES users(id) ON DELETE CASCADE
@@ -162,18 +163,28 @@ export function initializeDatabase() {
             FOREIGN KEY (mentorId) REFERENCES users(id) ON DELETE CASCADE
           );
 
-          CREATE TABLE IF NOT EXISTS task_questions (
+          CREATE TABLE IF NOT EXISTS mcq_questions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            taskId INTEGER NOT NULL,
+            entryId INTEGER NOT NULL,
             mentorId INTEGER NOT NULL,
-            studentId INTEGER NOT NULL,
             question TEXT NOT NULL,
-            answer TEXT,
-            status TEXT DEFAULT 'pending' CHECK(status IN ('pending', 'answered')),
+            options TEXT NOT NULL, -- JSON array of options
+            correctAnswer INTEGER NOT NULL, -- Index of correct answer
+            points INTEGER DEFAULT 1,
             createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-            answeredAt DATETIME,
-            FOREIGN KEY (taskId) REFERENCES tasks(id) ON DELETE CASCADE,
-            FOREIGN KEY (mentorId) REFERENCES users(id) ON DELETE CASCADE,
+            FOREIGN KEY (entryId) REFERENCES entries(id) ON DELETE CASCADE,
+            FOREIGN KEY (mentorId) REFERENCES users(id) ON DELETE CASCADE
+          );
+
+          CREATE TABLE IF NOT EXISTS mcq_answers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            questionId INTEGER NOT NULL,
+            studentId INTEGER NOT NULL,
+            selectedAnswer INTEGER NOT NULL, -- Index of selected option
+            isCorrect BOOLEAN NOT NULL,
+            points INTEGER DEFAULT 0,
+            answeredAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (questionId) REFERENCES mcq_questions(id) ON DELETE CASCADE,
             FOREIGN KEY (studentId) REFERENCES users(id) ON DELETE CASCADE
           );
 
@@ -196,8 +207,10 @@ export function initializeDatabase() {
           CREATE INDEX IF NOT EXISTS idx_doubts_subject ON doubts(subject);
           CREATE INDEX IF NOT EXISTS idx_doubts_priority ON doubts(priority);
           CREATE INDEX IF NOT EXISTS idx_doubt_answers_doubtId ON doubt_answers(doubtId);
-          CREATE INDEX IF NOT EXISTS idx_task_questions_taskId ON task_questions(taskId);
-          CREATE INDEX IF NOT EXISTS idx_task_questions_status ON task_questions(status);
+          CREATE INDEX IF NOT EXISTS idx_mcq_questions_entryId ON mcq_questions(entryId);
+          CREATE INDEX IF NOT EXISTS idx_mcq_questions_mentorId ON mcq_questions(mentorId);
+          CREATE INDEX IF NOT EXISTS idx_mcq_answers_questionId ON mcq_answers(questionId);
+          CREATE INDEX IF NOT EXISTS idx_mcq_answers_studentId ON mcq_answers(studentId);
         `;
 
         db.exec(schema, (err) => {

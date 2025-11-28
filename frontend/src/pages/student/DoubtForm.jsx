@@ -65,9 +65,9 @@ export default function DoubtForm({ onSubmit, onCancel }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900 p-6">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-slate-800/60 border border-purple-500/30 rounded-2xl shadow-2xl p-8">
+        <div className="bg-gradient-to-br from-purple-800/50 to-indigo-800/50 backdrop-blur-xl border border-purple-500/30 rounded-2xl shadow-2xl p-8">
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
@@ -76,14 +76,12 @@ export default function DoubtForm({ onSubmit, onCancel }) {
               </h2>
               <p className="text-purple-200">Get help from mentors on concepts and projects</p>
             </div>
-            {onCancel && (
-              <button
-                onClick={onCancel}
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <AlertCircle size={24} />
-              </button>
-            )}
+            <button
+              onClick={onCancel}
+              className="text-purple-300 hover:text-white transition-colors"
+            >
+              ✕
+            </button>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -126,7 +124,7 @@ export default function DoubtForm({ onSubmit, onCancel }) {
                 value={formData.concept}
                 onChange={handleChange}
                 placeholder="e.g., React Hooks, Data Structures, Machine Learning"
-                className="w-full px-4 py-3 bg-slate-700 border-2 border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
+                className="w-full px-4 py-3 bg-purple-900/50 border-2 border-purple-600/50 rounded-xl text-white placeholder-purple-300 focus:outline-none focus:border-purple-400 transition-colors"
                 required
               />
             </div>
@@ -170,7 +168,7 @@ export default function DoubtForm({ onSubmit, onCancel }) {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-slate-700 border-2 border-slate-600 rounded-xl text-white focus:outline-none focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-3 bg-purple-900/50 border-2 border-purple-600/50 rounded-xl text-white focus:outline-none focus:border-purple-400 transition-colors"
                   >
                     <option value="">Select Subject</option>
                     {SUBJECTS_FLAT.map(subject => (
@@ -186,7 +184,7 @@ export default function DoubtForm({ onSubmit, onCancel }) {
                     name="techStack"
                     value={formData.techStack}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-slate-700 border-2 border-slate-600 rounded-xl text-white focus:outline-none focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-3 bg-purple-900/50 border-2 border-purple-600/50 rounded-xl text-white focus:outline-none focus:border-purple-400 transition-colors"
                   >
                     <option value="">Select Tech Stack</option>
                     {TECH_STACKS.map(stack => (
@@ -206,7 +204,7 @@ export default function DoubtForm({ onSubmit, onCancel }) {
                   value={formData.projectName}
                   onChange={handleChange}
                   placeholder="e.g., E-commerce Website, Weather App"
-                  className="w-full px-4 py-3 bg-slate-700 border-2 border-slate-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
+                  className="w-full px-4 py-3 bg-purple-900/50 border-2 border-purple-600/50 rounded-xl text-white placeholder-purple-300 focus:outline-none focus:border-purple-400 transition-colors"
                 />
               </div>
             )}
@@ -259,7 +257,7 @@ export default function DoubtForm({ onSubmit, onCancel }) {
                 <button
                   type="button"
                   onClick={onCancel}
-                  className="px-6 py-3 bg-slate-700 text-white rounded-xl hover:bg-slate-600 font-semibold transition-colors"
+                  className="px-6 py-3 bg-purple-800/50 text-white rounded-xl hover:bg-purple-700/50 font-semibold transition-colors border border-purple-600/50"
                 >
                   Cancel
                 </button>
