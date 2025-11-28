@@ -7,7 +7,7 @@ const userSockets = new Map(); // userId -> socket id mapping
 export function initializeSocket(server) {
   io = new Server(server, {
     cors: {
-      origin: 'http://localhost:3000',
+      origin: 'https://mentor-matrix-alpha.vercel.app/login',
       methods: ['GET', 'POST'],
       credentials: true
     }

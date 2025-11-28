@@ -133,7 +133,7 @@ You should see:
 ```
 Database initialized successfully
 Socket.IO initialized
-Server running on http://localhost:5000
+Server running on https://mentormatrix.onrender.com
 WebSocket server ready
 ```
 
@@ -152,12 +152,12 @@ npm run dev
 You should see:
 ```
 VITE v5.0.8  ready in XXX ms
-➜  Local:   http://localhost:3000/
+➜  Local:   https://mentormatrix.onrender.com
 ```
 
 ### Step 3: Access the Application
 
-Open your browser and go to: **http://localhost:3000**
+Open your browser and go to: **https://mentormatrix.onrender.com**
 
 ## 🔐 Authentication & Security
 

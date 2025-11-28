@@ -6,7 +6,7 @@ async function testStudentAPI() {
     console.log('Testing student API endpoint...');
     
     // First, login as student to get token
-    const loginResponse = await fetch('http://localhost:5000/api/auth/login', {
+    const loginResponse = await fetch('https://mentormatrix.onrender.com/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -25,7 +25,7 @@ async function testStudentAPI() {
     console.log('Login successful, got token');
     
     // Now test the questions endpoint
-    const questionsResponse = await fetch('http://localhost:5000/api/mcq/entries/3/questions/student', {
+    const questionsResponse = await fetch('https://mentormatrix.onrender.com/api/mcq/entries/3/questions/student', {
       headers: {
         'Authorization': `Bearer ${loginData.token}`,
         'Content-Type': 'application/json'

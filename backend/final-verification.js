@@ -6,7 +6,7 @@ async function testUser(email, password, userName) {
   
   try {
     // Login
-    const loginResponse = await fetch('http://localhost:5000/api/auth/login', {
+    const loginResponse = await fetch('https://mentormatrix.onrender.com/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
@@ -21,7 +21,7 @@ async function testUser(email, password, userName) {
     console.log(`✅ ${userName} logged in successfully`);
     
     // Get entries
-    const entriesResponse = await fetch('http://localhost:5000/api/entries', {
+    const entriesResponse = await fetch('https://mentormatrix.onrender.com/api/entries', {
       headers: {
         'Authorization': `Bearer ${loginData.token}`,
         'Content-Type': 'application/json'
@@ -47,7 +47,7 @@ async function testUser(email, password, userName) {
       
       if (entry.deadline && new Date(entry.deadline) <= new Date()) {
         // Try to get questions
-        const quizResponse = await fetch(`http://localhost:5000/api/mcq/entries/${entry.id}/questions/student`, {
+        const quizResponse = await fetch(`https://mentormatrix.onrender.com/api/mcq/entries/${entry.id}/questions/student`, {
           headers: {
             'Authorization': `Bearer ${loginData.token}`,
             'Content-Type': 'application/json'

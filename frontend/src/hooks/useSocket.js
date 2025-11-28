@@ -15,7 +15,7 @@ export function useSocket() {
     }
 
     // Create socket connection
-    socketRef.current = io('http://localhost:5000', {
+    socketRef.current = io('https://mentormatrix.onrender.com', {
       auth: {
         token
       },

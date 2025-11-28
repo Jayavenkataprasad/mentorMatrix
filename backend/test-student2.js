@@ -7,7 +7,7 @@ async function testStudent2() {
     
     // Step 1: Login as student2
     console.log('\n1. Logging in as student2...');
-    const loginResponse = await fetch('http://localhost:5000/api/auth/login', {
+    const loginResponse = await fetch('https://mentormatrix.onrender.com/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -27,7 +27,7 @@ async function testStudent2() {
     
     // Step 2: Get student2 entries
     console.log('\n2. Getting student2 entries...');
-    const entriesResponse = await fetch('http://localhost:5000/api/entries', {
+    const entriesResponse = await fetch('https://mentormatrix.onrender.com/api/entries', {
       headers: {
         'Authorization': `Bearer ${loginData.token}`,
         'Content-Type': 'application/json'
@@ -45,7 +45,7 @@ async function testStudent2() {
     for (const entry of entriesData) {
       console.log(`\n3. Testing quiz for entry ${entry.id} (${entry.title})...`);
       
-      const quizResponse = await fetch(`http://localhost:5000/api/mcq/entries/${entry.id}/questions/student`, {
+      const quizResponse = await fetch(`https://mentormatrix.onrender.com/api/mcq/entries/${entry.id}/questions/student`, {
         headers: {
           'Authorization': `Bearer ${loginData.token}`,
           'Content-Type': 'application/json'
