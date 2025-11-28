@@ -95,7 +95,7 @@ export default function Navbar() {
                 className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-3 py-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 <LogOut size={16} />
-                <span className="hidden lg:inline">Logout</span>
+                <span className="hidden lg:inline">Log out</span>
               </button>
             </div>
 
