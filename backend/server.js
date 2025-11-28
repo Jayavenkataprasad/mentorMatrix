@@ -54,8 +54,8 @@ async function startServer() {
     initializeSocket(server);
     console.log('Socket.IO initialized');
 
-    server.listen(() => {
-      console.log(`Server running on https://mentormatrix.onrender.com`);
+    server.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
       console.log(`WebSocket server ready`);
     });
   } catch (error) {
