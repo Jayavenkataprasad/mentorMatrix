@@ -34,6 +34,18 @@ export default function Doubts() {
     }
   };
 
+  const handleSelectDoubt = async (doubt) => {
+    try {
+      // Fetch detailed doubt data including answers
+      const response = await api.get(`/doubts/${doubt.id}`);
+      setSelectedDoubt(response.data);
+    } catch (error) {
+      console.error('Error fetching doubt details:', error);
+      // Fallback to basic data if detailed fetch fails
+      setSelectedDoubt(doubt);
+    }
+  };
+
   const handleCreateDoubt = async (e) => {
     e.preventDefault();
     try {
@@ -194,7 +206,7 @@ export default function Doubts() {
             {doubts.map(doubt => (
               <div
                 key={doubt.id}
-                onClick={() => setSelectedDoubt(doubt)}
+                onClick={() => handleSelectDoubt(doubt)}
                 className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all border-l-4 border-blue-600 p-6 cursor-pointer transform hover:scale-105"
               >
                 <div className="flex justify-between items-start">

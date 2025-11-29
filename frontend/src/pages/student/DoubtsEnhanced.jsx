@@ -9,6 +9,7 @@ export default function DoubtsEnhanced() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [selectedDoubt, setSelectedDoubt] = useState(null);
+  const [loadingDoubtDetail, setLoadingDoubtDetail] = useState(false);
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterType, setFilterType] = useState('all');
   const [formData, setFormData] = useState({
@@ -63,6 +64,21 @@ export default function DoubtsEnhanced() {
     } catch (error) {
       console.error('Error creating doubt:', error);
       alert('Failed to create doubt');
+    }
+  };
+
+  const handleSelectDoubt = async (doubt) => {
+    try {
+      setLoadingDoubtDetail(true);
+      // Fetch detailed doubt data including answers
+      const response = await api.get(`/doubts/${doubt.id}`);
+      setSelectedDoubt(response.data);
+    } catch (error) {
+      console.error('Error fetching doubt details:', error);
+      // Fallback to basic data if detailed fetch fails
+      setSelectedDoubt(doubt);
+    } finally {
+      setLoadingDoubtDetail(false);
     }
   };
 
@@ -401,7 +417,7 @@ export default function DoubtsEnhanced() {
             {doubts.map(doubt => (
               <div
                 key={doubt.id}
-                onClick={() => setSelectedDoubt(doubt)}
+                onClick={() => handleSelectDoubt(doubt)}
                 className="bg-gradient-to-br from-purple-800/50 to-indigo-800/50 backdrop-blur-xl border border-purple-600/50 rounded-xl shadow-md hover:shadow-lg transition-all p-6 cursor-pointer transform hover:-translate-y-1"
               >
                 <div className="flex justify-between items-start">
@@ -457,7 +473,15 @@ export default function DoubtsEnhanced() {
       {selectedDoubt && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-96 overflow-y-auto border border-slate-200">
-            <div className="sticky top-0 bg-gradient-to-r from-indigo-500 to-sky-500 text-white p-6 flex justify-between items-center">
+            {loadingDoubtDetail ? (
+              <div className="flex items-center justify-center h-64">
+                <div className="text-center">
+                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                  <p className="text-gray-500 mt-2">Loading doubt details...</p>
+                </div>
+              </div>
+            ) : (
+              <div className="sticky top-0 bg-gradient-to-r from-indigo-500 to-sky-500 text-white p-6 flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{getTypeIcon(selectedDoubt.doubtType)}</span>
                 <h2 className="text-2xl font-bold">{selectedDoubt.question}</h2>
@@ -470,6 +494,7 @@ export default function DoubtsEnhanced() {
               </button>
             </div>
 
+            )}
             <div className="p-6 space-y-4">
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
                 <p className="text-purple-200 mb-3">{selectedDoubt.description}</p>
@@ -643,14 +668,10 @@ export default function DoubtsEnhanced() {
                   </button>
                 </div>
               )}
-
-              {selectedDoubt.status === 'needs_more_explanation' && (
-                <p className="text-center text-amber-500 py-4">⏳ Mentor will provide more explanation...</p>
-              )}
             </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
+  </div>
   );
 }

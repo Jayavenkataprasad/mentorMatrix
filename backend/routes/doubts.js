@@ -271,4 +271,74 @@ router.patch('/:id/status', authenticateToken, authorizeRole('mentor'), async (r
   }
 });
 
+// Mark doubt as needing more explanation (student only)
+router.patch('/:id/needs-more', authenticateToken, authorizeRole('student'), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const studentId = req.user.id;
+
+    // Verify doubt belongs to student
+    const doubt = await getAsync('SELECT * FROM doubts WHERE id = ? AND studentId = ?', [id, studentId]);
+    if (!doubt) {
+      return res.status(404).json({ error: 'Doubt not found or unauthorized' });
+    }
+
+    // Only allow "needs more explanation" if doubt is answered
+    if (doubt.status !== 'answered') {
+      return res.status(400).json({ error: 'Can only request more explanation for answered doubts' });
+    }
+
+    // Update doubt status
+    const result = await runAsync('UPDATE doubts SET status = ? WHERE id = ?', ['needs_more_explanation', id]);
+
+    if (result.changes === 0) {
+      return res.status(404).json({ error: 'Doubt not found' });
+    }
+
+    const updatedDoubt = await getAsync('SELECT * FROM doubts WHERE id = ?', [id]);
+
+    // Emit real-time event to mentors and the student
+    emitDoubtAnsweredToMentorsAndStudent(
+      updatedDoubt,
+      null, // no new answer, just status change
+      studentId
+    );
+
+    res.json(updatedDoubt);
+  } catch (error) {
+    console.error('Error marking doubt as needing more explanation:', error);
+    res.status(500).json({ error: 'Failed to update doubt' });
+  }
+});
+
+// Delete doubt (student only)
+router.delete('/:id', authenticateToken, authorizeRole('student'), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const studentId = req.user.id;
+
+    // Verify doubt belongs to student
+    const doubt = await getAsync('SELECT * FROM doubts WHERE id = ? AND studentId = ?', [id, studentId]);
+    if (!doubt) {
+      return res.status(404).json({ error: 'Doubt not found or unauthorized' });
+    }
+
+    // Delete doubt and related answers
+    await runAsync('DELETE FROM doubt_answers WHERE doubtId = ?', [id]);
+    const result = await runAsync('DELETE FROM doubts WHERE id = ?', [id]);
+
+    if (result.changes === 0) {
+      return res.status(404).json({ error: 'Doubt not found' });
+    }
+
+    // Emit real-time event to mentors
+    emitDoubtDeletedToMentors(doubt, studentId);
+
+    res.json({ message: 'Doubt deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting doubt:', error);
+    res.status(500).json({ error: 'Failed to delete doubt' });
+  }
+});
+
 export default router;
