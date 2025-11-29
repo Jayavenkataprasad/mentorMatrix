@@ -12,6 +12,9 @@ const router = express.Router();
 // Create doubt (student only)
 router.post('/', authenticateToken, authorizeRole('student'), async (req, res) => {
   try {
+    console.log('Creating doubt with body:', req.body);
+    console.log('User info:', req.user);
+    
     const { 
       concept, 
       question, 
@@ -28,6 +31,8 @@ router.post('/', authenticateToken, authorizeRole('student'), async (req, res) =
     if (!concept || !question) {
       return res.status(400).json({ error: 'Concept and question are required' });
     }
+
+    console.log('All validations passed, inserting into database...');
 
     const result = await runAsync(
       `INSERT INTO doubts (
@@ -48,7 +53,10 @@ router.post('/', authenticateToken, authorizeRole('student'), async (req, res) =
       ]
     );
 
+    console.log('Insert result:', result);
+
     const doubt = await getAsync('SELECT * FROM doubts WHERE id = ?', [result.id]);
+    console.log('Retrieved doubt:', doubt);
 
     // Emit real-time event to mentors and the student
     try {
@@ -61,7 +69,8 @@ router.post('/', authenticateToken, authorizeRole('student'), async (req, res) =
     res.status(201).json(doubt);
   } catch (error) {
     console.error('Error creating doubt:', error);
-    res.status(500).json({ error: 'Failed to create doubt' });
+    console.error('Error stack:', error.stack);
+    res.status(500).json({ error: 'Failed to create doubt', details: error.message });
   }
 });
 
