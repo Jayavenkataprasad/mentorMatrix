@@ -74,8 +74,7 @@ router.get('/', authenticateToken, async (req, res) => {
       query += ' AND d.studentId = ?';
       params.push(userId);
     } else if (userRole === 'mentor') {
-      query += ' AND (d.mentorId = ? OR d.mentorId IS NULL)';
-      params.push(userId);
+      query += ' AND (d.mentorId IS NULL)';
     }
 
     if (status) {

@@ -262,6 +262,21 @@ export default function DoubtsEnhanced() {
                 </div>
               )}
 
+              {/* Concept Input */}
+              <div>
+                <label className="block text-sm font-semibold text-purple-200 mb-3">
+                  Concept/Topic
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g., React Hooks, Database Normalization, API Design"
+                  value={formData.concept}
+                  onChange={(e) => setFormData({...formData, concept: e.target.value})}
+                  className="w-full px-4 py-3 bg-purple-900/50 border-2 border-purple-600/50 rounded-xl text-white placeholder-purple-300 focus:outline-none focus:border-purple-400 transition-colors"
+                  required
+                />
+              </div>
+
               {/* Question Title */}
               <div>
                 <label className="block text-sm font-semibold text-purple-200 mb-3">

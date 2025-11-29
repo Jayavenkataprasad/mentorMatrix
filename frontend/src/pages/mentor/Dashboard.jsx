@@ -52,6 +52,8 @@ export default function MentorDashboard() {
 
   const fetchQuizAnalytics = async () => {
     try {
+      console.log('Fetching quiz analytics for:', selectedStudent ? selectedStudent.name : 'All Students');
+      
       // Get all entries for this mentor
       const entriesResponse = await entriesAPI.getAll();
       const entries = entriesResponse.data;
@@ -60,6 +62,8 @@ export default function MentorDashboard() {
       const filteredEntries = selectedStudent 
         ? entries.filter(entry => entry.studentId === selectedStudent.id)
         : entries;
+      
+      console.log('Total entries:', entries.length, 'Filtered entries:', filteredEntries.length);
       
       let totalQuizzes = 0;
       let completedQuizzes = 0;
@@ -168,9 +172,12 @@ export default function MentorDashboard() {
             <p className="text-sm text-gray-400 mt-1">Reviews Needed</p>
           </div>
 
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 hover:bg-slate-700/30 transition-all">
+          <div 
+            onClick={() => navigate('/mentor/doubts')}
+            className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 hover:bg-slate-700/30 transition-all cursor-pointer group"
+          >
             <div className="flex items-center justify-between mb-4">
-              <MessageCircle className="text-purple-400" size={24} />
+              <MessageCircle className="text-purple-400 group-hover:scale-110 transition-transform" size={24} />
               <span className="text-xs text-purple-300 font-medium">Active</span>
             </div>
             <p className="text-3xl font-bold text-white">{analytics?.activeDoubts || 0}</p>
@@ -186,16 +193,16 @@ export default function MentorDashboard() {
               Quiz Analytics
             </h3>
             <select
-              value={selectedStudent ? selectedStudent.id : ''}
+              value={selectedStudent ? selectedStudent.id.toString() : ''}
               onChange={(e) => {
-                const student = students.find(s => s.id === e.target.value);
+                const student = students.find(s => s.id.toString() === e.target.value);
                 setSelectedStudent(student || null);
               }}
               className="bg-slate-700/50 border border-slate-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
             >
               <option value="">All Students</option>
               {students.map(student => (
-                <option key={student.id} value={student.id}>
+                <option key={student.id} value={student.id.toString()}>
                   {student.name}
                 </option>
               ))}
@@ -289,6 +296,15 @@ export default function MentorDashboard() {
             <CheckCircle className="mb-3 group-hover:scale-110 transition-transform" size={24} />
             <p className="font-semibold">Completed Tasks</p>
             <p className="text-sm opacity-80">Review progress</p>
+          </button>
+
+          <button
+            onClick={() => navigate('/mentor/doubts')}
+            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl p-6 transition-colors group"
+          >
+            <MessageCircle className="mb-3 group-hover:scale-110 transition-transform" size={24} />
+            <p className="font-semibold">Student Doubts</p>
+            <p className="text-sm opacity-80">Answer student questions</p>
           </button>
 
           <button

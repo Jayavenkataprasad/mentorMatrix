@@ -93,7 +93,7 @@ export default function Doubts() {
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               My Doubts
             </h1>
-            <p className="text-gray-600 mt-2">Ask questions and get clarification from your mentor</p>
+            <p className="text-purple-200 mt-2">Ask questions and get clarification from your mentor</p>
           </div>
           <button
             onClick={() => setShowForm(!showForm)}
@@ -182,12 +182,12 @@ export default function Doubts() {
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            <p className="text-gray-600 mt-4">Loading doubts...</p>
+            <p className="text-purple-200 mt-4">Loading doubts...</p>
           </div>
         ) : doubts.length === 0 ? (
           <div className="bg-white rounded-xl shadow-lg p-12 text-center border-t-4 border-blue-600">
             <MessageCircle size={48} className="mx-auto text-gray-400 mb-4" />
-            <p className="text-gray-600 text-lg">No doubts yet. Ask your first doubt!</p>
+            <p className="text-purple-200 text-lg">No doubts yet. Ask your first doubt!</p>
           </div>
         ) : (
           <div className="grid gap-4">
@@ -195,7 +195,7 @@ export default function Doubts() {
               <div
                 key={doubt.id}
                 onClick={() => setSelectedDoubt(doubt)}
-                className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all border-l-4 border-blue-600 p-6 cursor-pointer transform hover:scale-102"
+                className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all border-l-4 border-blue-600 p-6 cursor-pointer transform hover:scale-105"
               >
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
@@ -283,7 +283,6 @@ export default function Doubts() {
         </div>
       )}
     </div>
-      </div>
     </>
   );
 }
