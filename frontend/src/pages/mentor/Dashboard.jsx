@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import { mentorAPI, mcqAPI, entriesAPI } from '../../api/client';
+import { useRealtime } from '../../context/RealtimeContext.jsx';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Users, BookOpen, CheckCircle, AlertCircle, GraduationCap, MessageCircle, TrendingUp, Calendar, Clock, Award, HelpCircle, Brain } from 'lucide-react';
 
@@ -12,25 +13,28 @@ export default function MentorDashboard() {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { forceRefresh } = useRealtime();
 
   useEffect(() => {
     fetchAnalytics();
     fetchStudents();
     fetchQuizAnalytics();
-    
-    // Listen for quiz submissions from students
-    const handleQuizSubmission = (event) => {
-      console.log('MentorDashboard: Detected quiz submission, refreshing analytics...');
-      fetchQuizAnalytics();
-      fetchAnalytics(); // Also refresh general analytics
-    };
+  }, []);
 
-    window.addEventListener('quizSubmitted', handleQuizSubmission);
-    
-    return () => {
-      window.removeEventListener('quizSubmitted', handleQuizSubmission);
-    };
-  }, [selectedStudent]); // Re-fetch when student selection changes
+  // React to real-time updates
+  useEffect(() => {
+    if (forceRefresh > 0) {
+      console.log('MentorDashboard: Real-time update detected, refreshing data...');
+      fetchAnalytics();
+      fetchStudents();
+      fetchQuizAnalytics();
+    }
+  }, [forceRefresh]);
+
+  // Refresh quiz analytics when selected student changes
+  useEffect(() => {
+    fetchQuizAnalytics();
+  }, [selectedStudent]);
 
   const fetchAnalytics = async () => {
     try {

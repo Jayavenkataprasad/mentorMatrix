@@ -1,6 +1,12 @@
 import express from 'express';
 import { getAsync, runAsync, allAsync } from '../db.js';
 import { authenticateToken } from '../middleware/auth.js';
+import {
+  emitMCQQuestionCreated,
+  emitMCQQuestionUpdated,
+  emitMCQQuestionDeleted,
+  emitMCQAnswerSubmitted
+} from '../socket.js';
 
 const router = express.Router();
 
@@ -151,7 +157,7 @@ router.post('/entries/:entryId/questions', authenticateToken, async (req, res) =
       [entryId, user.id, question, JSON.stringify(options), correctAnswer, points || 1]
     );
 
-    res.status(201).json({
+    const newQuestion = {
       id: result.id,
       entryId,
       mentorId: user.id,
@@ -159,7 +165,12 @@ router.post('/entries/:entryId/questions', authenticateToken, async (req, res) =
       options,
       correctAnswer,
       points: points || 1
-    });
+    };
+
+    // Emit real-time event to all mentors
+    emitMCQQuestionCreated(newQuestion, user.id);
+
+    res.status(201).json(newQuestion);
   } catch (error) {
     console.error('Error creating MCQ question:', error);
     res.status(500).json({ error: 'Failed to create question' });
@@ -204,6 +215,17 @@ router.put('/questions/:questionId', authenticateToken, async (req, res) => {
       [question, JSON.stringify(options), correctAnswer, points || 1, questionId]
     );
 
+    const updatedQuestion = {
+      id: parseInt(questionId),
+      question,
+      options,
+      correctAnswer,
+      points: points || 1
+    };
+
+    // Emit real-time event to all mentors
+    emitMCQQuestionUpdated(updatedQuestion, user.id);
+
     res.json({ message: 'Question updated successfully' });
   } catch (error) {
     console.error('Error updating MCQ question:', error);
@@ -233,6 +255,9 @@ router.delete('/questions/:questionId', authenticateToken, async (req, res) => {
     }
 
     await runAsync('DELETE FROM mcq_questions WHERE id = ?', [questionId]);
+
+    // Emit real-time event to all mentors
+    emitMCQQuestionDeleted(parseInt(questionId), user.id);
 
     res.json({ message: 'Question deleted successfully' });
   } catch (error) {
@@ -317,6 +342,24 @@ router.post('/entries/:entryId/answers', authenticateToken, async (req, res) => 
         pointsEarned,
         correctAnswer: question.correctAnswer
       });
+    }
+
+    // Get the entry to find the mentor ID
+    const entryWithMentor = await getAsync(
+      'SELECT mentorId FROM entries WHERE id = ?',
+      [entryId]
+    );
+
+    // Emit real-time event to mentors
+    if (entryWithMentor && entryWithMentor.mentorId) {
+      emitMCQAnswerSubmitted({
+        entryId: parseInt(entryId),
+        studentId: user.id,
+        studentName: user.name,
+        results,
+        totalPoints,
+        submittedAt: new Date()
+      }, entryWithMentor.mentorId);
     }
 
     res.json({

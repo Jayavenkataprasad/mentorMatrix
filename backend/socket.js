@@ -7,7 +7,7 @@ const userSockets = new Map(); // userId -> socket id mapping
 export function initializeSocket(server) {
   io = new Server(server, {
     cors: {
-      origin: 'https://mentor-matrix-alpha.vercel.app/login' || 'http://localhost:3000/login',
+      origin: process.env.FRONTEND_URL || 'http://localhost:5173',
       methods: ['GET', 'POST'],
       credentials: true
     }
@@ -86,21 +86,22 @@ export function getUserSocket(userId) {
   return userSockets.get(userId);
 }
 
-// Event emitter functions
+// Event emitter functions for real-time updates
+
+// Student registration
 export function emitStudentRegistered(student) {
   if (!io) return;
   
-  // Emit to all mentors
   io.to('role:mentor').emit('student:registered', {
     student,
     timestamp: new Date()
   });
 }
 
+// Entry events
 export function emitEntryCreated(entry, mentorIds = []) {
   if (!io) return;
 
-  // Emit to student's mentors
   mentorIds.forEach(mentorId => {
     io.to(`mentor:${mentorId}`).emit('entry:created', {
       entry,
@@ -131,7 +132,6 @@ export function emitEntryStatusChanged(entry, mentorId, studentId) {
 export function emitCommentAdded(comment, entry) {
   if (!io) return;
 
-  // Emit to student
   io.to(`student:${entry.studentId}`).emit('comment:added', {
     comment,
     entryId: entry.id,
@@ -139,180 +139,23 @@ export function emitCommentAdded(comment, entry) {
   });
 }
 
+// Task events
 export function emitTaskAssigned(task, studentId) {
   if (!io) return;
 
-  // Emit to student
   io.to(`student:${studentId}`).emit('task:assigned', {
     task,
     timestamp: new Date()
   });
 }
 
-export function emitScheduleCreated(schedule, studentIds = []) {
+export function emitTaskUpdated(task, studentId) {
   if (!io) return;
 
-  // Emit to specific students
-  studentIds.forEach(studentId => {
-    io.to(`student:${studentId}`).emit('schedule:created', {
-      schedule,
-      timestamp: new Date()
-    });
-  });
-
-  // Emit to mentor
-  io.to(`mentor:${schedule.mentorId}`).emit('schedule:created', {
-    schedule,
+  io.to(`student:${studentId}`).emit('task:updated', {
+    task,
     timestamp: new Date()
   });
-}
-
-export function emitScheduleUpdated(schedule, studentIds = []) {
-  if (!io) return;
-
-  // Emit to specific students
-  studentIds.forEach(studentId => {
-    io.to(`student:${studentId}`).emit('schedule:updated', {
-      schedule,
-      timestamp: new Date()
-    });
-  });
-
-  // Emit to mentor
-  io.to(`mentor:${schedule.mentorId}`).emit('schedule:updated', {
-    schedule,
-    timestamp: new Date()
-  });
-}
-
-export function emitMetricsUpdated(mentorId, metrics) {
-  if (!io) return;
-
-  io.to(`mentor:${mentorId}`).emit('metrics:updated', {
-    metrics,
-    timestamp: new Date()
-  });
-}
-
-export function emitActivityFeedUpdate(userId, activity) {
-  if (!io) return;
-
-  io.to(`user:${userId}`).emit('activity:new', {
-    activity,
-    timestamp: new Date()
-  });
-}
-
-// Doubt-related events
-export function emitDoubtCreated(doubt, student) {
-  if (!io) return;
-
-  // Notify all mentors so their doubts dashboard updates
-  io.to('role:mentor').emit('doubt:created', {
-    doubt,
-    student,
-    timestamp: new Date()
-  });
-
-  // Also notify the student who created the doubt for dashboard updates
-  if (student && student.id) {
-    io.to(`student:${student.id}`).emit('doubt:created', {
-      doubt,
-      student,
-      timestamp: new Date()
-    });
-  }
-}
-
-export function emitDoubtAnswered(doubt, answer, studentId, mentorId) {
-  if (!io) return;
-
-  const payload = {
-    doubt,
-    answer,
-    timestamp: new Date()
-  };
-
-  // Notify the student who asked the doubt
-  if (studentId) {
-    io.to(`student:${studentId}`).emit('doubt:answered', payload);
-  }
-
-  // Notify the mentor who answered (and other mentors, via role room)
-  if (mentorId) {
-    io.to(`mentor:${mentorId}`).emit('doubt:answered', payload);
-  }
-  io.to('role:mentor').emit('doubt:answered', payload);
-}
-
-export function emitDoubtResolved(doubt, studentId, mentorId) {
-  if (!io) return;
-
-  const payload = {
-    doubt,
-    timestamp: new Date()
-  };
-
-  if (studentId) {
-    io.to(`student:${studentId}`).emit('doubt:resolved', payload);
-  }
-
-  if (mentorId) {
-    io.to(`mentor:${mentorId}`).emit('doubt:resolved', payload);
-  }
-  io.to('role:mentor').emit('doubt:resolved', payload);
-}
-
-export function broadcastToStudent(studentId, event, data) {
-  if (!io) return;
-  io.to(`student:${studentId}`).emit(event, data);
-}
-
-export function broadcastToCohort(cohortId, event, data) {
-  if (!io) return;
-  io.to(`cohort:${cohortId}`).emit(event, data);
-}
-
-export function emitDoubtCreatedToMentorsAndStudent(doubt, studentId) {
-  if (!io) return;
-
-  io.to('role:mentor').emit('doubt:created', {
-    doubt,
-    studentId,
-    timestamp: new Date()
-  });
-
-  io.to(`student:${studentId}`).emit('doubt:created', {
-    doubt,
-    timestamp: new Date()
-  });
-}
-
-export function emitDoubtAnsweredToMentorsAndStudent(doubt, answer, studentId) {
-  if (!io) return;
-
-  const payload = {
-    doubt,
-    answer,
-    timestamp: new Date()
-  };
-
-  io.to('role:mentor').emit('doubt:answered', payload);
-
-  io.to(`student:${studentId}`).emit('doubt:answered', payload);
-}
-
-export function emitDoubtResolvedToMentorsAndStudent(doubt, studentId) {
-  if (!io) return;
-
-  const payload = {
-    doubt,
-    timestamp: new Date()
-  };
-
-  io.to('role:mentor').emit('doubt:resolved', payload);
-
-  io.to(`student:${studentId}`).emit('doubt:resolved', payload);
 }
 
 export function emitTaskCompleted(task, studentId) {
@@ -330,6 +173,203 @@ export function emitTaskCompleted(task, studentId) {
   io.to('role:mentor').emit('task:completed', payload);
 }
 
+// Doubt events
+export function emitDoubtCreated(doubt, studentId, mentorId) {
+  if (!io) return;
+
+  const payload = {
+    doubt,
+    studentId,
+    timestamp: new Date()
+  };
+
+  // Notify all mentors for real-time dashboard updates
+  io.to('role:mentor').emit('doubt:created', payload);
+
+  // Notify specific mentor if assigned
+  if (mentorId) {
+    io.to(`mentor:${mentorId}`).emit('doubt:created', payload);
+  }
+
+  // Notify the student
+  io.to(`student:${studentId}`).emit('doubt:created', payload);
+}
+
+export function emitDoubtAnswered(doubt, answer, studentId, mentorId) {
+  if (!io) return;
+
+  const payload = {
+    doubt,
+    answer,
+    timestamp: new Date()
+  };
+
+  // Notify the student who asked the doubt
+  io.to(`student:${studentId}`).emit('doubt:answered', payload);
+
+  // Notify the mentor who answered
+  if (mentorId) {
+    io.to(`mentor:${mentorId}`).emit('doubt:answered', payload);
+  }
+
+  // Notify all mentors for dashboard updates
+  io.to('role:mentor').emit('doubt:answered', payload);
+}
+
+export function emitDoubtStatusChanged(doubt, studentId, mentorId) {
+  if (!io) return;
+
+  const payload = {
+    doubt,
+    timestamp: new Date()
+  };
+
+  // Notify the student
+  io.to(`student:${studentId}`).emit('doubt:statusChanged', payload);
+
+  // Notify the mentor
+  if (mentorId) {
+    io.to(`mentor:${mentorId}`).emit('doubt:statusChanged', payload);
+  }
+
+  // Notify all mentors for real-time dashboard updates
+  io.to('role:mentor').emit('doubt:statusChanged', payload);
+}
+
+export function emitDoubtResolved(doubt, studentId, mentorId) {
+  if (!io) return;
+
+  const payload = {
+    doubt,
+    timestamp: new Date()
+  };
+
+  // Notify the student
+  io.to(`student:${studentId}`).emit('doubt:resolved', payload);
+
+  // Notify the mentor
+  if (mentorId) {
+    io.to(`mentor:${mentorId}`).emit('doubt:resolved', payload);
+  }
+
+  // Notify all mentors
+  io.to('role:mentor').emit('doubt:resolved', payload);
+}
+
+// MCQ events
+export function emitMCQQuestionCreated(question, mentorId) {
+  if (!io) return;
+
+  io.to('role:mentor').emit('mcq:question:created', {
+    question,
+    timestamp: new Date()
+  });
+}
+
+export function emitMCQQuestionUpdated(question, mentorId) {
+  if (!io) return;
+
+  io.to('role:mentor').emit('mcq:question:updated', {
+    question,
+    timestamp: new Date()
+  });
+}
+
+export function emitMCQQuestionDeleted(questionId, mentorId) {
+  if (!io) return;
+
+  io.to('role:mentor').emit('mcq:question:deleted', {
+    questionId,
+    mentorId,
+    timestamp: new Date()
+  });
+}
+
+export function emitMCQAnswerSubmitted(answer, mentorId) {
+  if (!io) return;
+
+  const payload = {
+    answer,
+    timestamp: new Date()
+  };
+
+  // Notify the mentor
+  if (mentorId) {
+    io.to(`mentor:${mentorId}`).emit('mcq:answer:submitted', payload);
+  }
+
+  // Notify all mentors for real-time analytics
+  io.to('role:mentor').emit('mcq:answer:submitted:global', payload);
+}
+
+// Schedule events
+export function emitScheduleCreated(schedule, studentId) {
+  if (!io) return;
+
+  const payload = {
+    schedule,
+    timestamp: new Date()
+  };
+
+  // Emit to student
+  if (studentId) {
+    io.to(`student:${studentId}`).emit('schedule:created', payload);
+  }
+
+  // Emit to all mentors
+  io.to('role:mentor').emit('schedule:created:global', payload);
+
+  // Emit to specific mentor
+  if (schedule.mentorId) {
+    io.to(`mentor:${schedule.mentorId}`).emit('schedule:created', payload);
+  }
+}
+
+export function emitScheduleUpdated(schedule, studentId) {
+  if (!io) return;
+
+  const payload = {
+    schedule,
+    timestamp: new Date()
+  };
+
+  // Emit to student
+  if (studentId) {
+    io.to(`student:${studentId}`).emit('schedule:updated', payload);
+  }
+
+  // Emit to all mentors
+  io.to('role:mentor').emit('schedule:updated:global', payload);
+
+  // Emit to specific mentor
+  if (schedule.mentorId) {
+    io.to(`mentor:${schedule.mentorId}`).emit('schedule:updated', payload);
+  }
+}
+
+export function emitScheduleCancelled(schedule, studentId) {
+  if (!io) return;
+
+  const payload = {
+    schedule,
+    timestamp: new Date()
+  };
+
+  // Emit to student
+  if (studentId) {
+    io.to(`student:${studentId}`).emit('schedule:cancelled', payload);
+  }
+
+  // Emit to all mentors
+  io.to('role:mentor').emit('schedule:cancelled:global', payload);
+
+  // Emit to specific mentor
+  if (schedule.mentorId) {
+    io.to(`mentor:${schedule.mentorId}`).emit('schedule:cancelled', payload);
+  }
+}
+
+// Task Question events
 export function emitTaskQuestionAdded(question, studentId) {
   if (!io) return;
 
@@ -354,8 +394,36 @@ export function emitTaskQuestionAnswered(question, mentorId) {
   };
 
   // Notify the mentor
-  io.to(`mentor:${mentorId}`).emit('task:question_answered', payload);
+  if (mentorId) {
+    io.to(`mentor:${mentorId}`).emit('task:question_answered', payload);
+  }
 
   // Notify all mentors
   io.to('role:mentor').emit('task:question_answered', payload);
+}
+
+// Utility functions
+export function broadcastToStudent(studentId, event, data) {
+  if (!io) return;
+  io.to(`student:${studentId}`).emit(event, data);
+}
+
+export function broadcastToMentor(mentorId, event, data) {
+  if (!io) return;
+  io.to(`mentor:${mentorId}`).emit(event, data);
+}
+
+export function broadcastToAllMentors(event, data) {
+  if (!io) return;
+  io.to('role:mentor').emit(event, data);
+}
+
+export function broadcastToAllStudents(event, data) {
+  if (!io) return;
+  io.to('role:student').emit(event, data);
+}
+
+export function broadcastToCohort(cohortId, event, data) {
+  if (!io) return;
+  io.to(`cohort:${cohortId}`).emit(event, data);
 }
