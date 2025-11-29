@@ -114,7 +114,13 @@ export default function DoubtsQAEnhanced() {
       setAttachments([]);
       setIsRecording(false);
 
-      fetchData();
+      // If we're on the "open" tab, switch to "answered" tab to show the answered doubt
+      if (doubtSubTab === 'open') {
+        setDoubtSubTab('answered');
+      } else {
+        fetchData();
+      }
+      
       setSelectedItem(null);
       alert('Answer submitted successfully!');
     } catch (error) {
@@ -166,7 +172,16 @@ export default function DoubtsQAEnhanced() {
   const handleResolveDoubt = async (id, status) => {
     try {
       await api.patch(`/doubts/${id}/status`, { status });
-      fetchData();
+      
+      // Switch to appropriate tab based on new status
+      if (status === 'resolved') {
+        setDoubtSubTab('resolved');
+      } else if (status === 'answered') {
+        setDoubtSubTab('answered');
+      } else {
+        fetchData();
+      }
+      
       setSelectedItem(null);
     } catch (error) {
       console.error('Error updating doubt:', error);
