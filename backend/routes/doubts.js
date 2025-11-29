@@ -9,6 +9,11 @@ import {
 
 const router = express.Router();
 
+// Test endpoint
+router.get('/test', (req, res) => {
+  res.json({ message: 'Doubts route is working', timestamp: new Date() });
+});
+
 // Create doubt (student only)
 router.post('/', authenticateToken, authorizeRole('student'), async (req, res) => {
   try {
