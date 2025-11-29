@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { RealtimeProvider } from './context/RealtimeContext.jsx';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Home from './pages/Home';
 import StudentDashboard from './pages/student/Dashboard';
 import StudentEntries from './pages/student/Entries';
 import CreateEntry from './pages/student/CreateEntry';
@@ -50,9 +51,10 @@ function AppRoutes() {
     <Routes>
       {!user ? (
         <>
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </>
       ) : user.role === 'student' ? (
         <>
