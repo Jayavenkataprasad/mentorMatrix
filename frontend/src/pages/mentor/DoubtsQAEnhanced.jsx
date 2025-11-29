@@ -14,6 +14,7 @@ export default function DoubtsQAEnhanced() {
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterPriority, setFilterPriority] = useState('all');
   const [filterType, setFilterType] = useState('all');
+  const [doubtSubTab, setDoubtSubTab] = useState('open'); // New sub-tab for doubts
   const [answerText, setAnswerText] = useState('');
   const [resources, setResources] = useState('');
   const [unreadCount, setUnreadCount] = useState(0);
@@ -31,7 +32,7 @@ export default function DoubtsQAEnhanced() {
   // Fetch data when filters or tab change
   useEffect(() => {
     fetchData();
-  }, [filterStatus, filterPriority, filterType, activeTab]);
+  }, [filterStatus, filterPriority, filterType, activeTab, doubtSubTab]);
 
   // React to realtime doubt events to refresh list without polling
   const doubtEventsKey = useMemo(() => {
@@ -57,7 +58,12 @@ export default function DoubtsQAEnhanced() {
       setLoading(true);
       if (activeTab === 'doubts') {
         const params = {};
-        if (filterStatus !== 'all') params.status = filterStatus;
+        // Apply sub-tab filter
+        if (doubtSubTab !== 'all') {
+          params.status = doubtSubTab;
+        } else if (filterStatus !== 'all') {
+          params.status = filterStatus;
+        }
         if (filterPriority !== 'all') params.priority = filterPriority;
         if (filterType !== 'all') params.doubtType = filterType;
         
@@ -306,9 +312,39 @@ export default function DoubtsQAEnhanced() {
           </button>
         </div>
 
+        {/* Sub-tabs for Doubts */}
+        {activeTab === 'doubts' && (
+          <div className="flex gap-2 mb-6 border-b border-slate-700">
+            {[
+              { key: 'open', label: 'Open', icon: AlertCircle },
+              { key: 'answered', label: 'Answered', icon: MessageCircle },
+              { key: 'resolved', label: 'Resolved', icon: CheckCircle },
+              { key: 'all', label: 'All', icon: Filter }
+            ].map(tab => (
+              <button
+                key={tab.key}
+                onClick={() => setDoubtSubTab(tab.key)}
+                className={`px-4 py-2 font-medium transition-all border-b-2 ${
+                  doubtSubTab === tab.key
+                    ? 'text-purple-300 border-purple-400'
+                    : 'text-gray-400 border-transparent hover:text-gray-300'
+                }`}
+              >
+                <tab.icon className="inline mr-2" size={16} />
+                {tab.label}
+                {tab.key === 'open' && unreadCount > 0 && (
+                  <span className="ml-2 px-2 py-0.5 bg-purple-500 text-white text-xs rounded-full">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Filters */}
         <div className="flex gap-3 mb-6 flex-wrap">
-          {activeTab === 'doubts' && (
+          {activeTab === 'doubts' && doubtSubTab === 'all' && (
             <>
               <div className="flex gap-2">
                 <span className="text-purple-200 font-semibold self-center text-sm">Status:</span>

@@ -43,7 +43,7 @@ export default function Login() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
       <div className="bg-slate-800/50 border border-slate-700 rounded-2xl shadow-2xl w-full max-w-md p-8 backdrop-blur-sm">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Mentor Portal</h1>
+          <h1 className="text-4xl font-bold text-white mb-2">Mentor Matrix</h1>
           <p className="text-purple-200">Welcome back to your learning journey</p>
         </div>
 
@@ -127,7 +127,7 @@ export default function Login() {
         <div className="mt-6 pt-6 border-t border-slate-700">
           <div className="text-center text-xs text-gray-500">
             <p>Student Portal: Access your learning materials</p>
-            <p>Mentor Portal: Guide and assess students</p>
+            <p>Mentor Matrix: Guide and assess students</p>
           </div>
         </div>
       </div>
