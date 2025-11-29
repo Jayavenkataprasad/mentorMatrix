@@ -168,7 +168,7 @@ export default function DoubtsEnhanced() {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-4xl font-bold text-white mb-2">
-              Doubts & Questions
+              
             </h1>
             <p className="text-purple-200">Get clarity on concepts and projects from your mentor</p>
           </div>
@@ -335,7 +335,7 @@ export default function DoubtsEnhanced() {
                       onClick={() => setFormData({...formData, priority: level.value})}
                       className={`p-3 rounded-xl border-2 transition-all font-semibold ${
                         formData.priority === level.value
-                          ? `${level.color} border-current` 
+                          ? `${level.color} border-current`
                           : 'bg-slate-50 border-slate-200 text-purple-200 hover:border-indigo-400'
                       }`}
                     >
@@ -482,198 +482,198 @@ export default function DoubtsEnhanced() {
               </div>
             ) : (
               <>
-                <div className="sticky top-0 bg-gradient-to-r from-indigo-500 to-sky-500 text-white p-6 flex justify-between items-center">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{getTypeIcon(selectedDoubt.doubtType)}</span>
-                    <h2 className="text-2xl font-bold">{selectedDoubt.question}</h2>
-                  </div>
-                  <button
-                    onClick={() => setSelectedDoubt(null)}
-                    className="text-white hover:bg-white/20 p-2 rounded-lg transition-colors"
-                  >
-                    <X size={24} />
-                  </button>
+              <div className="sticky top-0 bg-gradient-to-r from-indigo-500 to-sky-500 text-white p-6 flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{getTypeIcon(selectedDoubt.doubtType)}</span>
+                  <h2 className="text-2xl font-bold">{selectedDoubt.question}</h2>
                 </div>
+                <button
+                  onClick={() => setSelectedDoubt(null)}
+                  className="text-white hover:bg-white/20 p-2 rounded-lg transition-colors"
+                >
+                  <X size={24} />
+                </button>
+              </div>
 
-                <div className="p-6 space-y-4">
-                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <p className="text-purple-200 mb-3">{selectedDoubt.description}</p>
-                    <div className="flex gap-2 flex-wrap">
-                      <span className="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-sm font-semibold border border-indigo-100">
-                        📖 {selectedDoubt.subject}
-                      </span>
-                      {selectedDoubt.techStack && (
-                        <span className="bg-sky-50 text-sky-700 px-3 py-1 rounded-full text-sm font-semibold border border-sky-100">
-                          ⚙️ {selectedDoubt.techStack}
-                        </span>
-                      )}
-                      {selectedDoubt.projectName && (
-                        <span className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-sm font-semibold border border-emerald-100">
-                          🎯 {selectedDoubt.projectName}
-                        </span>
-                      )}
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getPriorityBadge(selectedDoubt.priority)}`}>
-                        {selectedDoubt.priority.toUpperCase()}
-                      </span>
-                    </div>
-                  </div>
+            <div className="p-6 space-y-4">
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <p className="text-purple-200 mb-3">{selectedDoubt.description}</p>
+                <div className="flex gap-2 flex-wrap">
+                  <span className="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-sm font-semibold border border-indigo-100">
+                    📖 {selectedDoubt.subject}
+                  </span>
+                  {selectedDoubt.techStack && (
+                    <span className="bg-sky-50 text-sky-700 px-3 py-1 rounded-full text-sm font-semibold border border-sky-100">
+                      ⚙️ {selectedDoubt.techStack}
+                    </span>
+                  )}
+                  {selectedDoubt.projectName && (
+                    <span className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-sm font-semibold border border-emerald-100">
+                      🎯 {selectedDoubt.projectName}
+                    </span>
+                  )}
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getPriorityBadge(selectedDoubt.priority)}`}>
+                    {selectedDoubt.priority.toUpperCase()}
+                  </span>
+                </div>
+              </div>
 
-                  {/* Answers */}
-                  {selectedDoubt.answers && selectedDoubt.answers.length > 0 && (
-                    <div className="border-t border-slate-200 pt-4">
-                      <h3 className="font-bold text-white mb-3">Mentor's Answers</h3>
-                      <div className="space-y-3">
-                        {selectedDoubt.answers.map(answer => (
-                          <div key={answer.id} className="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded">
-                            <p className="font-semibold text-indigo-700 mb-2">{answer.mentorName}</p>
-                            {answer.answer && <p className="text-purple-200 mb-3">{answer.answer}</p>}
-                            
-                            {/* Voice Note */}
-                            {answer.voiceNoteUrl && (
-                              <div className="mb-3">
-                                <p className="text-sm text-slate-500 mb-2 flex items-center gap-1">
-                                  <Mic size={14} />
-                                  Voice Note
-                                </p>
-                                <audio controls src={answer.voiceNoteUrl} className="w-full" />
-                              </div>
-                            )}
-
-                            {/* File Attachments */}
-                            {answer.attachments && JSON.parse(answer.attachments).length > 0 && (
-                              <div className="mb-3">
-                                <p className="text-sm text-gray-400 mb-2 flex items-center gap-1">
-                                  <Paperclip size={14} />
-                                  Attachments
-                                </p>
-                                <div className="space-y-2">
-                                  {JSON.parse(answer.attachments).map((file, index) => (
-                                    <div key={index} className="flex items-center justify-between bg-slate-700/50 p-2 rounded">
-                                      <span className="text-sm text-purple-200 truncate">{file.name}</span>
-                                      <button
-                                        onClick={() => downloadFile(file)}
-                                        className="text-indigo-600 hover:text-indigo-500"
-                                      >
-                                        <Download size={16} />
-                                      </button>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {answer.resources && (
-                              <p className="text-sm text-slate-500">📚 Resources: {answer.resources}</p>
-                            )}
+              {/* Answers */}
+              {selectedDoubt.answers && selectedDoubt.answers.length > 0 && (
+                <div className="border-t border-slate-200 pt-4">
+                  <h3 className="font-bold text-white mb-3">Mentor's Answers</h3>
+                  <div className="space-y-3">
+                    {selectedDoubt.answers.map(answer => (
+                      <div key={answer.id} className="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded">
+                        <p className="font-semibold text-indigo-700 mb-2">{answer.mentorName}</p>
+                        {answer.answer && <p className="text-purple-200 mb-3">{answer.answer}</p>}
+                        
+                        {/* Voice Note */}
+                        {answer.voiceNoteUrl && (
+                          <div className="mb-3">
+                            <p className="text-sm text-slate-500 mb-2 flex items-center gap-1">
+                              <Mic size={14} />
+                              Voice Note
+                            </p>
+                            <audio controls src={answer.voiceNoteUrl} className="w-full" />
                           </div>
-                        ))}
+                        )}
+
+                        {/* File Attachments */}
+                        {answer.attachments && JSON.parse(answer.attachments).length > 0 && (
+                          <div className="mb-3">
+                            <p className="text-sm text-gray-400 mb-2 flex items-center gap-1">
+                              <Paperclip size={14} />
+                              Attachments
+                            </p>
+                            <div className="space-y-2">
+                              {JSON.parse(answer.attachments).map((file, index) => (
+                                <div key={index} className="flex items-center justify-between bg-slate-700/50 p-2 rounded">
+                                  <span className="text-sm text-purple-200 truncate">{file.name}</span>
+                                  <button
+                                    onClick={() => downloadFile(file)}
+                                    className="text-indigo-600 hover:text-indigo-500"
+                                  >
+                                    <Download size={16} />
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {answer.resources && (
+                          <p className="text-sm text-slate-500">📚 Resources: {answer.resources}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Timeline Strip */}
+              <div className="border-t border-slate-200 pt-4">
+                <h3 className="font-bold text-white mb-3">Activity Timeline</h3>
+                <div className="relative">
+                  {/* Timeline line */}
+                  <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-indigo-500/20"></div>
+                  <div className="space-y-4">
+                    {/* Created */}
+                    <div className="flex items-start gap-3">
+                      <div className="relative z-10 w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                        <MessageCircle size={16} className="text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-3 transition-all duration-300 hover:bg-indigo-100">
+                          <p className="font-semibold text-indigo-700">Doubt Created</p>
+                          <p className="text-sm text-purple-200 mt-1">You asked: {selectedDoubt.question}</p>
+                          <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
+                            <Clock size={12} />
+                            {formatTimestamp(selectedDoubt.createdAt)}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  )}
 
-                  {/* Timeline Strip */}
-                  <div className="border-t border-slate-200 pt-4">
-                    <h3 className="font-bold text-white mb-3">Activity Timeline</h3>
-                    <div className="relative">
-                      {/* Timeline line */}
-                      <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-indigo-500/20"></div>
-                      <div className="space-y-4">
-                        {/* Created */}
-                        <div className="flex items-start gap-3">
-                          <div className="relative z-10 w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center shadow-lg animate-pulse">
-                            <MessageCircle size={16} className="text-white" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-3 transition-all duration-300 hover:bg-indigo-100">
-                              <p className="font-semibold text-indigo-700">Doubt Created</p>
-                              <p className="text-sm text-purple-200 mt-1">You asked: {selectedDoubt.question}</p>
-                              <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
-                                <Clock size={12} />
-                                {formatTimestamp(selectedDoubt.createdAt)}
-                              </p>
-                            </div>
+                    {/* Answered */}
+                    {selectedDoubt.answers && selectedDoubt.answers.length > 0 && selectedDoubt.answers.map((answer, idx) => (
+                      <div key={answer.id} className="flex items-start gap-3">
+                        <div className="relative z-10 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg">
+                          <CheckCircle size={16} className="text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-3 transition-all duration-300 hover:bg-emerald-100">
+                            <p className="font-semibold text-emerald-700">Answered</p>
+                            <p className="text-sm text-purple-200 mt-1">Mentor responded</p>
+                            {answer.resources && (
+                              <p className="text-xs text-slate-500 mt-2">📚 Resources: {answer.resources}</p>
+                            )}
+                            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
+                              <Clock size={12} />
+                              {formatTimestamp(answer.createdAt)}
+                            </p>
                           </div>
                         </div>
-
-                        {/* Answered */}
-                        {selectedDoubt.answers && selectedDoubt.answers.length > 0 && selectedDoubt.answers.map((answer, idx) => (
-                          <div key={answer.id} className="flex items-start gap-3">
-                            <div className="relative z-10 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg">
-                              <CheckCircle size={16} className="text-white" />
-                            </div>
-                            <div className="flex-1">
-                              <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-3 transition-all duration-300 hover:bg-emerald-100">
-                                <p className="font-semibold text-emerald-700">Answered</p>
-                                <p className="text-sm text-purple-200 mt-1">Mentor responded</p>
-                                {answer.resources && (
-                                  <p className="text-xs text-slate-500 mt-2">📚 Resources: {answer.resources}</p>
-                                )}
-                                <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
-                                  <Clock size={12} />
-                                  {formatTimestamp(answer.createdAt)}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-
-                        {/* Resolved */}
-                        {selectedDoubt.status === 'resolved' && (
-                          <div className="flex items-start gap-3">
-                            <div className="relative z-10 w-8 h-8 bg-sky-500 rounded-full flex items-center justify-center shadow-lg">
-                              <CheckCircle size={16} className="text-white" />
-                            </div>
-                            <div className="flex-1">
-                              <div className="bg-sky-50 border border-sky-100 rounded-xl p-3 transition-all duration-300 hover:bg-sky-100">
-                                <p className="font-semibold text-sky-700">Resolved</p>
-                                <p className="text-sm text-purple-200 mt-1">Doubt marked as resolved</p>
-                                <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
-                                  <Clock size={12} />
-                                  {formatTimestamp(selectedDoubt.updatedAt)}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Pending next step */}
-                        {selectedDoubt.status === 'open' && (
-                          <div className="flex items-start gap-3 opacity-60">
-                            <div className="relative z-10 w-8 h-8 bg-slate-400 rounded-full flex items-center justify-center">
-                              <Clock size={16} className="text-white" />
-                            </div>
-                            <div className="flex-1">
-                              <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
-                                <p className="font-semibold text-purple-200">Awaiting Answer</p>
-                                <p className="text-sm text-slate-500 mt-1">Mentor will respond soon</p>
-                              </div>
-                            </div>
-                          </div>
-                        )}
                       </div>
-                    </div>
+                    ))}
+
+                    {/* Resolved */}
+                    {selectedDoubt.status === 'resolved' && (
+                      <div className="flex items-start gap-3">
+                        <div className="relative z-10 w-8 h-8 bg-sky-500 rounded-full flex items-center justify-center shadow-lg">
+                          <CheckCircle size={16} className="text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="bg-sky-50 border border-sky-100 rounded-xl p-3 transition-all duration-300 hover:bg-sky-100">
+                            <p className="font-semibold text-sky-700">Resolved</p>
+                            <p className="text-sm text-purple-200 mt-1">Doubt marked as resolved</p>
+                            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
+                              <Clock size={12} />
+                              {formatTimestamp(selectedDoubt.updatedAt)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Pending next step */}
+                    {selectedDoubt.status === 'open' && (
+                      <div className="flex items-start gap-3 opacity-60">
+                        <div className="relative z-10 w-8 h-8 bg-slate-400 rounded-full flex items-center justify-center">
+                          <Clock size={16} className="text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                            <p className="font-semibold text-purple-200">Awaiting Answer</p>
+                            <p className="text-sm text-slate-500 mt-1">Mentor will respond soon</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
-
-                  {selectedDoubt.status === 'open' && (
-                    <p className="text-center text-slate-500 py-4">⏳ Waiting for mentor's response...</p>
-                  )}
-
-                  {selectedDoubt.status === 'answered' && (
-                    <div className="flex gap-2 pt-4">
-                      <button
-                        onClick={handleNeedsMoreExplanation}
-                        className="flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white py-2 rounded-xl hover:shadow-lg font-semibold"
-                      >
-                        Needs More Explanation
-                      </button>
-                    </div>
-                  )}
                 </div>
-              </>
-            )}
-          </div>
+              </div>
+
+              {selectedDoubt.status === 'open' && (
+                <p className="text-center text-slate-500 py-4">⏳ Waiting for mentor's response...</p>
+              )}
+
+              {selectedDoubt.status === 'answered' && (
+                <div className="flex gap-2 pt-4">
+                  <button
+                    onClick={handleNeedsMoreExplanation}
+                    className="flex-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white py-2 rounded-xl hover:shadow-lg font-semibold"
+                  >
+                    Needs More Explanation
+                  </button>
+                </div>
+              )}
+            </div>
+            </>
+          )}
         </div>
-      )}
+      </div>
     </div>
+  </div>
   );
 }
