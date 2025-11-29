@@ -2,9 +2,10 @@ import express from 'express';
 import { authenticateToken, authorizeRole } from '../middleware/auth.js';
 import { runAsync, getAsync, allAsync } from '../db.js';
 import {
-  emitDoubtCreatedToMentorsAndStudent,
-  emitDoubtAnsweredToMentorsAndStudent,
-  emitDoubtResolvedToMentorsAndStudent
+  emitDoubtCreated,
+  emitDoubtAnswered,
+  emitDoubtResolved,
+  emitDoubtStatusChanged
 } from '../socket.js';
 
 const router = express.Router();
@@ -65,7 +66,7 @@ router.post('/', authenticateToken, authorizeRole('student'), async (req, res) =
 
     // Emit real-time event to mentors and the student
     try {
-      emitDoubtCreatedToMentorsAndStudent(doubt, studentId);
+      emitDoubtCreated(doubt, studentId, doubt.mentorId);
     } catch (socketError) {
       console.error('Socket emission error:', socketError);
       // Continue even if socket fails
@@ -212,10 +213,11 @@ router.post('/:id/answers', authenticateToken, authorizeRole('mentor'), async (r
     const updatedDoubt = await getAsync('SELECT * FROM doubts WHERE id = ?', [id]);
 
     // Emit real-time event to mentors and the student
-    emitDoubtAnsweredToMentorsAndStudent(
+    emitDoubtAnswered(
       updatedDoubt,
       doubtAnswer,
-      doubt.studentId
+      updatedDoubt.studentId,
+      updatedDoubt.mentorId
     );
 
     res.status(201).json(doubtAnswer);
@@ -280,7 +282,9 @@ router.patch('/:id/status', authenticateToken, authorizeRole('mentor'), async (r
 
     // Emit real-time event to mentors and the student
     if (status === 'resolved') {
-      emitDoubtResolvedToMentorsAndStudent(updatedDoubt, updatedDoubt.studentId);
+      emitDoubtResolved(updatedDoubt, updatedDoubt.studentId, updatedDoubt.mentorId);
+    } else {
+      emitDoubtStatusChanged(updatedDoubt, updatedDoubt.studentId, updatedDoubt.mentorId);
     }
 
     res.json(updatedDoubt);
@@ -318,10 +322,10 @@ router.patch('/:id/needs-more', authenticateToken, authorizeRole('student'), asy
 
     // Emit real-time event to mentors and the student
     try {
-      emitDoubtAnsweredToMentorsAndStudent(
+      emitDoubtStatusChanged(
         updatedDoubt,
-        null, // no new answer, just status change
-        studentId
+        studentId,
+        updatedDoubt.mentorId
       );
     } catch (socketError) {
       console.error('Socket emission error:', socketError);
@@ -357,7 +361,7 @@ router.delete('/:id', authenticateToken, authorizeRole('student'), async (req, r
 
     // Emit real-time event to mentors
     try {
-      emitDoubtCreatedToMentorsAndStudent(doubt, studentId); // Reuse existing function
+      emitDoubtStatusChanged(doubt, studentId, doubt.mentorId);
     } catch (socketError) {
       console.error('Socket emission error:', socketError);
       // Continue even if socket fails
